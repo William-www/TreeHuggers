@@ -28,15 +28,17 @@
       </section>
 
       <section class="story-section" id="story" aria-labelledby="story-title">
-        <div class="wrap story-grid">
-          <div>
-            <p class="eyebrow">THE MAIN MESSAGE</p>
-            <h2 id="story-title">A green city can still have uneven shade.</h2>
+        <div class="wrap story-layout">
+          <div class="story-heading">
+            <p class="eyebrow story-eyebrow"> THE MAIN MESSAGE</p>
+            <h2 id="story-title">A green city can still have <span>uneven shade.</span></h2>
           </div>
-          <div class="story-copy">            
-            <p>Atlanta is the ‘City in the Forest’, but access to the forest and tree canopy is unequal: historic neighborhood inequalities are still reflected in where trees and extreme heat are concentrated today.</p>
+
+          <div class="story-copy">
+            <p class="story-lead">Atlanta is the ‘City in the Forest’, but access to the forest and tree canopy is unequal.</p>
+            <p class="story-context">Historic neighborhood inequalities are still reflected in where trees and extreme heat are concentrated today.</p>
           </div>
-        </div>
+
       </section>
 
       <section class="workspace-section tone-mist" id="vis-1" aria-labelledby="vis-1-title">
@@ -54,17 +56,41 @@
       </section>
 
       <section class="closing-section" id="team" aria-labelledby="team-title">
-        <div class="wrap closing-grid">
-          <div>
-            <p class="eyebrow">TREE HUGGERS / CS 6730</p>
-            <h2 id="team-title">Follow the data.<br />Look closer at place.</h2>
+        <div class="wrap closing-note">
+          <div class="closing-message">
+            <h2 id="team-title">Thank you for<br /><span>exploring with us.</span></h2>
+            <p class="closing-intro">
+              We hope this journey has helped you see Atlanta through a different lens:
+              how trees shape our neighborhoods, how heat affects our communities,
+              and how the city's history continues to influence its environment.
+            </p>
+            <p class="closing-takeaway">A greener Atlanta starts with understanding where change is needed most.</p>
           </div>
-          <div>
-            <h3>Project team</h3>
-            <p>Aidan Murray<br />Weisheng Zhang<br />Christian Cardenas<br />Yanni Xu<br />Sophia Hawkins</p>
-          </div>
+
+          <aside class="closing-details" aria-label="Project credits">
+            <div class="closing-detail-group">
+              <h3>Data Sources</h3>
+              <ul class="source-list">
+                <li>Atlanta Tree Canopy Coverage Data</li>
+                <li>Land Surface Temperature Data (2010–2023)</li>
+                <li>Historical HOLC Redlining Maps</li>
+              </ul>
+            </div>
+            <div class="closing-detail-group">
+              <h3>Team Members</h3>
+              <ul class="team-list">
+                <li>Aidan Murray</li>
+                <li>Weisheng Zhang</li>
+                <li>Christian Cardenas</li>
+                <li>Yanni Xu</li>
+                <li>Sophia Hawkins</li>
+              </ul>
+            </div>
+          </aside>
         </div>
-        <footer class="site-footer"><div class="wrap">TREE HUGGERS · ATLANTA FIELD NOTES</div></footer>
+
+        <footer class="site-footer">
+        </footer>
       </section>
     </main>
     <script src="js/state.js"></script>

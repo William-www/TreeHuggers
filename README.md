@@ -4,7 +4,11 @@ Group members: Aidan Murray, Weisheng Zhang, Christian Cardenas, Yanni Xu, Sophi
 
 ## Preview the page
 
-Clone this repository and open this folder in your local IDE. Run `python3 -m http.server 8000` in this folder and open `http://localhost:8000`.
+Clone this repository and open this folder in your local IDE. 
+
+From the project's root directory, run: `python3 -m http.server 8000` 
+
+Then open `http://localhost:8000` in your browser.
 
 ## Folders
 
