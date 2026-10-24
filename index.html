@@ -38,13 +38,103 @@
             <p class="story-lead">Atlanta is the ‘City in the Forest’, but access to the forest and tree canopy is unequal.</p>
             <p class="story-context">Historic neighborhood inequalities are still reflected in where trees and extreme heat are concentrated today.</p>
           </div>
-
+        </div>
       </section>
 
-      <section class="workspace-section tone-mist" id="vis-1" aria-labelledby="vis-1-title">
-        <div class="wrap">
-          <h2 id="vis-1-title">Vis 1 title.</h2>
-          <div id="vis-1-chart"></div>
+      <section class="workspace-section tone-paper" id="vis-1" aria-labelledby="vis-1-title">
+        <div class="wrap concept-wrap">
+          <div class="concept-layout">
+          <figure class="concept-figure">
+          <div class="concept-heading">
+            <p class="eyebrow">VISUALIZATION / CANOPY &amp; HOLC</p>
+            <h2 id="vis-1-title">Canopy, <span>heat</span> &amp; HOLC</h2>
+          </div>
+          <p class="mobile-hint">Swipe diagram to see values →</p>
+          <div class="board-scroll">
+            <div class="concept-board" id="concept-board" data-active="" aria-label="Concept diagram comparing HOLC grades, tree canopy, and surface heat disparity">
+              <div class="rail grade-rail" aria-label="Select a HOLC grade">
+                <p class="rail-title">HOLC GRADE</p>
+                <button class="grade-row" data-grade="D" style="--top:27%; --grade:var(--terracotta)" aria-pressed="false"><span class="grade-mark">D</span><span class="grade-text">HOLC D</span></button>
+                <button class="grade-row" data-grade="C" style="--top:44%; --grade:var(--gold)" aria-pressed="false"><span class="grade-mark">C</span><span class="grade-text">HOLC C</span></button>
+                <button class="grade-row" data-grade="B" style="--top:61%; --grade:var(--mist)" aria-pressed="false"><span class="grade-mark">B</span><span class="grade-text">HOLC B</span></button>
+                <button class="grade-row" data-grade="A" style="--top:78%; --grade:var(--canopy)" aria-pressed="false"><span class="grade-mark">A</span><span class="grade-text">HOLC A</span></button>
+              </div>
+              <div class="tree-stage" role="img" aria-label="Illustrative four-tiered tree: the canopy grows wider from HOLC D at the top to HOLC A at the bottom. Golden sun and heat arrows fall from above.">
+                <svg viewBox="0 0 550 550" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <defs>
+                    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M1 1 L7 4 L1 7" fill="none" stroke="#b87950" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></marker>
+                    <radialGradient id="sunGlow"><stop offset="0" stop-color="#f2b544" stop-opacity=".24"/><stop offset="1" stop-color="#f2b544" stop-opacity="0"/></radialGradient>
+                    <linearGradient id="canopyA" x2="0" y2="1"><stop stop-color="#9bb782"/><stop offset="1" stop-color="#547a51"/></linearGradient>
+                    <linearGradient id="canopyB" x2="0" y2="1"><stop stop-color="#b5ca97"/><stop offset="1" stop-color="#789b6a"/></linearGradient>
+                    <linearGradient id="canopyC" x2="0" y2="1"><stop stop-color="#d1ddb0"/><stop offset="1" stop-color="#a5bc83"/></linearGradient>
+                    <linearGradient id="canopyD" x2="0" y2="1"><stop stop-color="#e0e8c4"/><stop offset="1" stop-color="#bdd098"/></linearGradient>
+                    <g id="leafSprig">
+                      <path class="leaf-stem" d="M0 16 C12 11 24 9 38 4"/>
+                      <path class="leaf-shape" d="M10 12 C1 13 -2 5 4 1 C12 2 16 7 10 12 Z"/>
+                      <path class="leaf-shape" d="M24 8 C21 0 27 -5 35 -4 C37 4 32 9 24 8 Z"/>
+                    </g>
+                  </defs>
+                  <line class="guide-line" x1="10" y1="148" x2="540" y2="148"/>
+                  <line class="guide-line" x1="10" y1="242" x2="540" y2="242"/>
+                  <line class="guide-line" x1="10" y1="335" x2="540" y2="335"/>
+                  <line class="guide-line" x1="10" y1="429" x2="540" y2="429"/>
+                  <circle cx="275" cy="24" r="77" fill="url(#sunGlow)"/>
+                  <circle cx="275" cy="15" r="35" fill="#f2b544"/>
+                  <path class="sun-ray" d="M219 20 l-13 0 M331 20 l13 0 M235 57 l-10 10 M315 57 l10 10 M230 -18 l-9 -9 M320 -18 l9 -9"/>
+                  <path class="sun-arrow" d="M227 55 C185 72 157 100 143 128"/>
+                  <path class="sun-arrow" d="M266 59 C250 88 245 112 242 133"/>
+                  <path class="sun-arrow" d="M300 58 C329 88 344 116 346 144"/>
+                  <path class="sun-arrow" d="M329 42 C386 79 420 112 430 155"/>
+                  <ellipse cx="278" cy="535" rx="132" ry="8" fill="#d9cda9" opacity=".32"/>
+                  <path class="tree-wood" d="M277 397 C247 361 217 348 165 338 M280 390 C315 354 348 343 397 336 M276 305 C250 277 221 257 183 247 M282 304 C312 271 338 253 371 244 M277 210 C252 184 232 164 206 156 M280 207 C305 179 327 160 344 153" stroke-width="8"/>
+                  <path d="M244 529 C258 504 265 476 269 443 C274 406 269 379 273 350 C277 318 274 289 276 259 C279 226 274 196 276 167 C277 139 274 115 276 96 C276 91 283 90 285 96 C288 126 283 147 285 176 C287 207 283 231 287 263 C291 299 286 325 290 354 C292 384 289 411 296 443 C303 478 308 505 322 529 L306 529 C295 507 286 481 283 460 C278 490 268 514 257 529 Z" fill="#76532f"/>
+                  <path d="M276 150 C279 204 283 248 280 294 C278 343 281 388 281 431" fill="none" stroke="#a47a48" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+                  <path class="tree-wood" d="M252 520 C226 534 208 538 181 539 M309 521 C332 535 352 539 377 538" stroke-width="7"/>
+                  <g class="crown crown-a" transform="translate(0 441) scale(1 .62) translate(0 -430)">
+                    <path class="crown-silhouette" d="M54 442 C43 430 50 412 66 409 C70 391 91 382 108 389 C118 371 140 366 157 376 C174 357 201 360 218 370 C236 352 263 354 279 367 C298 352 326 354 340 372 C359 357 388 360 402 379 C424 371 447 382 451 401 C474 399 494 415 490 434 C509 447 504 467 485 473 C478 491 455 493 439 485 C417 500 392 494 376 488 C350 501 323 494 306 490 C284 503 259 498 242 490 C216 500 193 493 176 485 C148 495 126 486 118 481 C91 488 72 478 67 465 C52 464 47 455 54 442 Z"/>
+                    <path class="crown-ridge" d="M77 418 C89 393 111 396 127 400 C143 375 169 382 181 389 C198 371 224 376 237 385 C255 367 281 375 291 384 C309 368 332 377 343 391 C366 372 390 388 400 401 C422 388 449 406 458 420 C419 415 390 420 367 414 C340 422 312 412 284 417 C252 410 220 419 190 412 C152 419 121 410 77 418 Z"/>
+                    <use href="#leafSprig" transform="translate(105 428) rotate(-12) scale(.9)"/><use href="#leafSprig" transform="translate(186 410) rotate(10)"/><use href="#leafSprig" transform="translate(281 423) rotate(-8) scale(.9)"/><use href="#leafSprig" transform="translate(378 416) rotate(14)"/><use href="#leafSprig" transform="translate(449 444) rotate(-23) scale(.8)"/>
+                  </g>
+                  <g class="crown crown-b" transform="translate(0 335) scale(1 .78) translate(0 -335)">
+                    <path class="crown-silhouette" d="M105 348 C95 336 103 320 116 319 C122 303 138 297 153 303 C166 288 187 290 200 300 C220 284 242 287 254 298 C275 286 296 289 308 301 C328 289 349 295 360 307 C379 300 397 310 398 325 C420 324 435 337 431 352 C446 365 433 380 416 377 C404 389 381 388 370 379 C348 392 327 385 313 379 C292 391 267 389 251 381 C229 390 206 384 194 378 C174 388 152 379 148 370 C125 375 111 364 105 348 Z"/>
+                    <path class="crown-ridge" d="M120 326 C132 307 151 310 163 314 C178 296 199 301 212 307 C229 294 249 302 263 311 C283 296 301 305 316 315 C337 302 355 316 367 324 C387 314 411 332 414 342 C382 338 361 345 337 339 C312 346 291 339 269 342 C242 338 215 345 194 338 C168 345 144 332 120 326 Z"/>
+                    <use href="#leafSprig" transform="translate(136 340) rotate(-11) scale(.75)"/><use href="#leafSprig" transform="translate(220 325) rotate(13) scale(.9)"/><use href="#leafSprig" transform="translate(315 332) rotate(-14) scale(.85)"/><use href="#leafSprig" transform="translate(383 346) rotate(11) scale(.7)"/>
+                  </g>
+                  <g class="crown crown-c" transform="translate(0 242) scale(1 .8) translate(0 -242)">
+                    <path class="crown-silhouette" d="M143 253 C133 243 139 228 151 226 C156 211 173 207 186 214 C198 201 219 204 229 213 C246 200 266 205 276 215 C294 203 312 209 323 220 C340 211 358 220 364 233 C383 231 396 244 391 256 C403 268 391 281 375 279 C365 290 347 286 338 279 C320 288 302 285 289 280 C273 291 253 287 240 280 C221 289 203 282 195 276 C174 282 158 272 156 261 C143 263 137 258 143 253 Z"/>
+                    <path class="crown-ridge" d="M157 232 C170 215 187 221 199 225 C213 210 229 218 241 224 C259 209 278 222 288 228 C304 215 325 223 337 233 C351 224 373 238 376 246 C345 241 325 249 302 244 C280 249 262 242 242 247 C214 243 190 250 157 232 Z"/>
+                    <use href="#leafSprig" transform="translate(177 244) rotate(-12) scale(.75)"/><use href="#leafSprig" transform="translate(257 239) rotate(13) scale(.8)"/><use href="#leafSprig" transform="translate(334 248) rotate(-9) scale(.7)"/>
+                  </g>
+                  <g class="crown crown-d">
+                    <path class="crown-silhouette" d="M184 158 C174 148 181 132 196 129 C198 114 213 107 227 113 C234 101 253 101 265 110 C280 98 300 101 308 113 C324 107 339 116 341 129 C358 130 366 142 361 154 C373 164 362 179 347 177 C335 191 314 183 304 185 C291 196 273 190 263 186 C246 194 234 184 220 186 C203 183 192 181 188 169 C178 169 177 161 184 158 Z"/>
+                    <path class="crown-ridge" d="M197 138 C210 117 227 121 239 126 C253 112 268 119 278 126 C291 113 309 122 317 131 C333 122 350 137 352 145 C329 141 312 147 292 143 C272 149 255 142 236 147 C218 144 208 145 197 138 Z"/>
+                    <use href="#leafSprig" transform="translate(211 151) rotate(-9) scale(.65)"/><use href="#leafSprig" transform="translate(278 148) rotate(14) scale(.68)"/><use href="#leafSprig" transform="translate(325 154) rotate(-13) scale(.58)"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="rail metric-rail" aria-label="Metrics for each HOLC grade">
+                <p class="rail-title">GROUP AVERAGES</p>
+                <div class="metric-row" data-grade="D" style="--top:27%; --grade:var(--terracotta)" title="120 Atlanta census block groups"><div><span class="metric-label">HEAT Δ</span><strong>+6.7<span class="unit">°F</span></strong></div><div><span class="metric-label">CANOPY</span><strong>34.4<span class="unit">%</span></strong></div></div>
+                <div class="metric-row" data-grade="C" style="--top:44%; --grade:var(--gold)" title="133 Atlanta census block groups"><div><span class="metric-label">HEAT Δ</span><strong>+2.6<span class="unit">°F</span></strong></div><div><span class="metric-label">CANOPY</span><strong>45.1<span class="unit">%</span></strong></div></div>
+                <div class="metric-row" data-grade="B" style="--top:61%; --grade:var(--mist)" title="20 Atlanta census block groups"><div><span class="metric-label">HEAT Δ</span><strong>−0.2<span class="unit">°F</span></strong></div><div><span class="metric-label">CANOPY</span><strong>52.4<span class="unit">%</span></strong></div></div>
+                <div class="metric-row" data-grade="A" style="--top:78%; --grade:var(--canopy)" title="7 Atlanta census block groups"><div><span class="metric-label">HEAT Δ</span><strong>−3.8<span class="unit">°F</span></strong></div><div><span class="metric-label">CANOPY</span><strong>65.3<span class="unit">%</span></strong></div></div>
+              </div>
+            </div>
+          </div>
+          <p class="concept-note"><strong>Click a grade to highlight its tier.</strong> Crown widths are illustrative. Heat Δ is the surface-temperature gap from the urban average.</p>
+          </figure>
+          <aside class="concept-caption" aria-label="What redlining and the HOLC grades mean">
+            <p class="eyebrow">WHY THESE GRADES</p>
+            <h3>Redlining, in brief</h3>
+            <p>In the 1930s the Home Owners’ Loan Corporation graded neighborhoods by how risky a mortgage seemed. The poorest areas, where more Black residents lived, were outlined in red and cut off from loans. That practice is called redlining.</p>
+            <ul class="grade-key">
+              <li><span class="grade-mark" style="--grade:var(--canopy)">A</span><span><strong>Best.</strong> Newest housing, highest demand, and often restricted to white residents. Lenders treated these streets as the safest bet.</span></li>
+              <li><span class="grade-mark" style="--grade:var(--mist)">B</span><span><strong>Still desirable.</strong> Stable areas HOLC still considered a sound investment.</span></li>
+              <li><span class="grade-mark" style="--grade:var(--gold)">C</span><span><strong>Definitely declining.</strong> Older housing, frequently mixed by class or ethnicity. Credit was already harder to get.</span></li>
+              <li><span class="grade-mark" style="--grade:var(--terracotta)">D</span><span><strong>Hazardous.</strong> Outlined in red and largely shut out of federally backed mortgages. Many of these neighborhoods were home to Black residents.</span></li>
+            </ul>
+          </aside>
+          </div>
         </div>
       </section>
 
@@ -55,6 +145,7 @@
         </div>
       </section>
 
+<!-- if failed, delete this section -->
       <section class="closing-section" id="team" aria-labelledby="team-title">
         <div class="wrap closing-note">
           <div class="closing-message">
