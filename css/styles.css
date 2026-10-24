@@ -269,3 +269,12 @@ h2 { margin: 0; font-size: clamp(42px, 5vw, 68px); line-height: 1.08; letter-spa
 @media (max-height: 720px) {
   .closing-section { overflow-y: auto; }
 }
+
+#vis-canopy.workspace-section { display: block; padding: 78px 0 0; overflow: auto; background: #f3efdc; }
+#vis-canopy .canopy-chapter { height: calc(100dvh - 78px); min-height: 0; max-width: none; margin: 0 auto; grid-template-rows: auto minmax(0, 1fr) auto; }
+#vis-canopy .canopy-chapter h2 { font-size: clamp(28px, 2.6vw, 40px); line-height: 1.05; letter-spacing: -.045em; }
+#vis-canopy .canopy-chapter h2 em { font-style: normal; color: var(--green); }
+#vis-canopy .canopy-chapter h3 { margin: 0; font-size: 18px; line-height: 1.2; font-weight: 800; letter-spacing: -.3px; }
+@media (max-width: 760px) {
+  #vis-canopy .canopy-chapter { height: auto; min-height: calc(100dvh - 78px); }
+}

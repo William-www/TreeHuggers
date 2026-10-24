@@ -1,0 +1,9 @@
+landscape.webp <- background/background.png
+atlanta.webp <- text/Atlanta_Nunito_Style_PaperCut.png
+subtitle.webp <- text/City_in_the_Forest_Regular_PaperCut.png
+question.webp <- text/Question_Mark_Terracotta.png
+closer.webp <- text/But_What_Happens_Closer_Arrow.png
+bubble-one.webp <- bubble/01_Blank_Bubble_Wide_Right.png
+bubble-two.webp <- bubble/03_Blank_Bubble_Wide_Left.png
+bubble-three.webp <- bubble/02_Blank_Bubble_Oval_Right.png
+bubble-four.webp <- bubble/04_Blank_Bubble_Compact_Left.png

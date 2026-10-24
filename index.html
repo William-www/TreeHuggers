@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="prototypes/Tree_Huggers_Four_Pages/canopy/canopy-map.css" />
   </head>
   <body>
     <a class="skip-link" href="#story">Skip to story</a>
@@ -39,6 +40,92 @@
             <p class="story-context">Historic neighborhood inequalities are still reflected in where trees and extreme heat are concentrated today.</p>
           </div>
         </div>
+      </section>
+
+      <section class="workspace-section tone-paper" id="vis-canopy" aria-labelledby="vis-canopy-title">
+        <section class="canopy-chapter" id="canopy-chapter" aria-labelledby="vis-canopy-title">
+          <div class="chapter-intro">
+            <div>
+              <p class="eyebrow">VISUALIZATION / CANOPY</p>
+              <h2 id="vis-canopy-title">A city of <em>uneven shade.</em></h2>
+            </div>
+            <div class="intro-copy">
+              <p>Atlanta’s green canopy is a patchwork.<br>Explore the pieces. Compare what you find.</p>
+              <span>433 grid cells · 1 km grid, clipped to city limits</span>
+            </div>
+          </div>
+          <div class="explorer">
+            <div class="atlas">
+              <div class="atlas-top">
+                <span>ATLANTA CANOPY ATLAS</span>
+                <div class="map-tools">
+                  <button type="button" id="toggle-basemap" aria-pressed="true">Basemap on</button>
+                  <span aria-label="North is up">N ↑</span>
+                </div>
+              </div>
+              <div class="map-stage">
+                <svg id="canopy-map" role="group" aria-label="Interactive canopy coverage map of Atlanta. Use arrow keys to move between grid cells and Enter to select."></svg>
+                <p class="basemap-credit" id="basemap-credit">Basemap: <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer" target="_blank" rel="noopener noreferrer">USGS · The National Map</a></p>
+              </div>
+              <div class="map-bottom">
+                <div class="layer-opacity-control">
+                  <label for="canopy-opacity">Canopy layer opacity <output id="canopy-opacity-value" for="canopy-opacity">60%</output></label>
+                  <input id="canopy-opacity" type="range" min="25" max="100" step="5" value="60" aria-label="Canopy layer opacity">
+                </div>
+                <div class="legend-title">
+                  <span>Tree canopy coverage · ▧ 0% values need checking</span>
+                  <button id="clear-filter" type="button" hidden>Show all</button>
+                </div>
+                <div id="map-legend" class="map-legend" aria-label="Filter by canopy coverage"></div>
+                <p class="legend-note">Select a range to highlight. Opacity does not change values. <span class="zero-symbol">▧</span> Zero values need verification.</p>
+              </div>
+            </div>
+            <aside class="field-notes" aria-label="Grid details and comparison">
+              <p class="eyebrow">GRID DETAILS</p>
+              <div class="paper-note">
+                <div class="note-top"><span id="detail-id">Choose a grid cell</span></div>
+                <p class="detail-value"><span id="detail-value">—</span><span class="percent" id="detail-unit" hidden>%</span></p>
+                <p class="value-label">tree canopy coverage</p>
+                <div class="note-bottom">
+                  <span id="detail-location">Each piece has its own story.</span>
+                  <p id="detail-status">Move across the map to explore the reported coverage in each grid cell.</p>
+                </div>
+              </div>
+              <label class="grid-picker-label" for="grid-picker">Or find a grid by ID</label>
+              <select id="grid-picker"><option value="">Choose a grid cell…</option></select>
+              <div class="comparison">
+                <div class="comparison-header">
+                  <h3>Compare two grid cells</h3>
+                  <button id="reset-selection" type="button">Clear picks</button>
+                </div>
+                <p class="compare-instruction" id="selection-instruction">Select a cell for A, then another for B.</p>
+                <div class="compare-slots">
+                  <button type="button" class="compare-slot" id="slot-a" aria-pressed="true"><span class="slot-label"><span class="slot-letter">A</span><span id="a-id">Pick a piece</span></span><strong id="a-value">—</strong><span class="slot-action" id="a-action">Next selection</span></button>
+                  <button type="button" class="compare-slot" id="slot-b" aria-pressed="false"><span class="slot-label"><span class="slot-letter">B</span><span id="b-id">Pick a piece</span></span><strong id="b-value">—</strong><span class="slot-action" id="b-action">Select second</span></button>
+                </div>
+                <div class="comparison-bars" id="comparison-bars" hidden>
+                  <div class="bar-row"><span>A</span><div class="bar-track"><div id="bar-a"></div></div><span id="bar-value-a"></span></div>
+                  <div class="bar-row"><span>B</span><div class="bar-track"><div id="bar-b"></div></div><span id="bar-value-b"></span></div>
+                  <div class="bar-axis"><span>0%</span><span>100%</span></div>
+                </div>
+                <p class="comparison-result" id="comparison-result" aria-live="polite">Two grid cells can reveal different amounts of green.</p>
+              </div>
+            </aside>
+          </div>
+          <footer class="data-footer">
+            <p>Source: team-provided canopy grid and Atlanta city boundary. Display field: <code>canopy_pct_final</code>. Values shown to one decimal place; calculations use the original precision.</p>
+            <details>
+              <summary>Data notes &amp; methodology</summary>
+              <div>
+                <p>This map displays 433 supplied polygons. The original grid spacing is 1,000 m in the source projected coordinates; displayed polygons are clipped to the city boundary. A grid cell is not a census tract or a named neighborhood.</p>
+                <p><strong>Calculation basis requires confirmation.</strong> The team reports a full 1 km² denominator. However, the supplied <code>canopy_pct</code> and <code>canopy_pct_final</code> fields differ: grid 16 reports 0.456% and 53.83%, respectively. This version displays the final field without recalculation. Do not interpret it as a verified whole-cell or clipped-area measure until the original calculation is confirmed.</p>
+                <p>Five cells report 0% while <code>canopymean</code> is null: 323, 324, 350, 351, 586. They retain their reported values and carry hatching. Zero canopy and unavailable raster data have not yet been distinguished. Comparisons involving these cells carry a verification note.</p>
+                <p>Coverage is not a direct measure of shade experienced by residents. Data year and raster source metadata have not been supplied in the exported files. Grid IDs and row/column indices come directly from the export.</p>
+              </div>
+            </details>
+          </footer>
+          <p class="sr-only" id="map-announcement" aria-live="polite"></p>
+        </section>
       </section>
 
       <section class="workspace-section tone-paper" id="vis-1" aria-labelledby="vis-1-title">
@@ -187,5 +274,9 @@
     <script src="js/state.js"></script>
     <script src="js/views/vis1.js"></script>
     <script src="js/views/vis2.js"></script>
+    <script src="prototypes/Tree_Huggers_Four_Pages/canopy/assets/d3.min.js"></script>
+    <script src="prototypes/Tree_Huggers_Four_Pages/canopy/data.js"></script>
+    <script src="prototypes/Tree_Huggers_Four_Pages/canopy/basemap.js"></script>
+    <script src="prototypes/Tree_Huggers_Four_Pages/canopy/canopy-map.js"></script>
   </body>
 </html>

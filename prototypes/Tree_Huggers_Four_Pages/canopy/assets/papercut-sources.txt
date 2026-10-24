@@ -1,0 +1,5 @@
+papercut-sun.webp <- sun/11_Sun.png (resized web copy; original artwork unchanged)
+papercut-cloud.webp <- clouds/Cloud_02_Low.png (resized web copy; original artwork unchanged)
+papercut-leaf.webp <- leaves/Leaf_01_Olive.png (resized web copy; original artwork unchanged)
+papercut-oak.webp <- single_tree/Tree_01_Oak.png (resized web copy; original artwork unchanged)
+papercut-forest.webp <- trees/Foreground_03_Low.png (resized web copy; original artwork unchanged)
