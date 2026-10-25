@@ -272,7 +272,7 @@
 #vis-heat.workspace-section {
   display: flex;
   flex-direction: column;
-  padding: 86px 36px 28px;
+  padding: calc(var(--header) + 12px) 36px 16px;
   overflow: hidden;
 }
 #vis-heat .page {

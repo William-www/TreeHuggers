@@ -1,0 +1,72 @@
+#vis-2.workspace-section { overflow: hidden; padding: calc(var(--header) + 14px) 0 16px; }
+#vis-2 .wrap { height: 100%; gap: 14px; }
+#vis-2 .tree-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  flex: none;
+  min-height: 0;
+}
+#vis-2 .tree-copy { min-width: 0; max-width: 820px; }
+#vis-2 h2 {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(26px, 2.5vw, 36px);
+  line-height: 1.18;
+  letter-spacing: -.03em;
+}
+#vis-2 .tree-meta {
+  margin: 10px 0 0;
+  color: var(--canopy);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+#vis-2 .tree-meta #vis-2-link:empty { display: none; }
+#vis-2 .tree-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  color: var(--canopy);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+}
+#vis-2 .tree-gradient {
+  width: 180px;
+  height: 10px;
+  flex: none;
+  background: linear-gradient(90deg, #E9D8A6 0%, #74C69D 50%, #1B4332 100%);
+  border: 1px solid var(--forest);
+}
+#vis-2 .tree-levels { margin-left: auto; font-weight: 800; letter-spacing: .08em; }
+#vis-2 .tree-tools { display: flex; gap: 6px; flex: none; padding-top: 4px; }
+#vis-2 .tree-tools button {
+  background: transparent;
+  border: 1px solid var(--forest);
+  color: var(--forest);
+  font: 800 11px/1 Nunito, sans-serif;
+  letter-spacing: .04em;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+#vis-2 .tree-tools button.is-active,
+#vis-2 .tree-tools button:hover { background: var(--forest); color: var(--paper); }
+#vis-2-chart {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid rgba(24, 62, 44, .17);
+  border-top: 5px solid var(--gold);
+  background: transparent;
+  box-shadow: 10px 10px 0 rgba(131, 185, 182, .28);
+}
+@media (max-width: 760px) {
+  #vis-2.workspace-section { overflow: auto; height: auto; min-height: 100dvh; }
+  #vis-2 .tree-head { flex-wrap: wrap; }
+  #vis-2 h2 { font-size: 24px; }
+  #vis-2 .tree-legend { flex-wrap: wrap; }
+  #vis-2 .tree-levels { margin-left: 0; }
+  #vis-2-chart { height: 68vh; flex: none; }
+}

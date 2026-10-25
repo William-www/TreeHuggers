@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/vis-heat.css" />
+    <link rel="stylesheet" href="css/vis-tree.css" />
     <link rel="stylesheet" href="prototypes/Tree_Huggers_Four_Pages/canopy/canopy-map.css" />
   </head>
   <body>
@@ -78,7 +79,7 @@
                   <button id="clear-filter" type="button" hidden>Show all</button>
                 </div>
                 <div id="map-legend" class="map-legend" aria-label="Filter by canopy coverage"></div>
-                <p class="legend-note">Select a range to highlight. Opacity does not change values. <span class="zero-symbol">▧</span> Zero values need verification.</p>
+                <p class="legend-note">Select a range to highlight it here and in the neighborhood hierarchy below. Opacity does not change values. <span class="zero-symbol">▧</span> Zero values need verification.</p>
               </div>
             </div>
             <aside class="field-notes" aria-label="Grid details and comparison">
@@ -127,6 +128,29 @@
           </footer>
           <p class="sr-only" id="map-announcement" aria-live="polite"></p>
         </section>
+      </section>
+
+      <section class="workspace-section tone-paper" id="vis-2" aria-labelledby="vis-2-title">
+        <div class="wrap">
+          <div class="tree-head">
+            <div class="tree-copy">
+              <h2 id="vis-2-title">Atlanta Tree Canopy Coverage Across Administrative Levels</h2>
+              <p class="tree-meta"><span>Area-weighted tree canopy percentage (0–100%).</span> <span>Scroll to zoom, drag to pan, or click any Census Tract node to expand its Block Groups.</span> <span id="vis-2-link"></span></p>
+            </div>
+            <div class="tree-tools">
+              <button type="button" data-tree-layout="radial" class="is-active" aria-pressed="true">Radial</button>
+              <button type="button" data-tree-layout="orthogonal" aria-pressed="false">Horizontal</button>
+            </div>
+          </div>
+          <div class="tree-legend" aria-label="Tree canopy percentage scale">
+            <span>Tree canopy %</span>
+            <span>0%</span>
+            <div class="tree-gradient"></div>
+            <span>75%+</span>
+            <span class="tree-levels">Spatial hierarchy · Root → NPU → Census tract → Block group</span>
+          </div>
+          <div id="vis-2-chart" role="img" aria-label="Tree of Atlanta tree canopy from the city to neighborhood planning units, census tracts, and block groups. Click a place to highlight that canopy range on the atlas."></div>
+        </div>
       </section>
 
       <section class="workspace-section tone-paper" id="vis-1" aria-labelledby="vis-1-title">
@@ -285,13 +309,6 @@
         </div>
       </section>
 
-      <section class="workspace-section tone-paper" id="vis-2" aria-labelledby="vis-2-title">
-        <div class="wrap">
-          <h2 id="vis-2-title">Vis 2 title.</h2>
-          <div id="vis-2-chart"></div>
-        </div>
-      </section>
-
 <!-- if failed, delete this section -->
       <section class="closing-section" id="team" aria-labelledby="team-title">
         <div class="wrap closing-note">
@@ -333,6 +350,7 @@
     </main>
     <script src="js/state.js"></script>
     <script src="js/views/vis1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <script src="js/views/vis2.js"></script>
     <script src="js/views/vis7.js"></script>
     <script src="prototypes/Tree_Huggers_Four_Pages/canopy/assets/d3.min.js"></script>
