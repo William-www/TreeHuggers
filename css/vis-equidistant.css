@@ -1,0 +1,90 @@
+#vis-distance.workspace-section {
+  flex-direction: column;
+  padding: calc(var(--header) + 14px) 0 16px;
+  overflow: hidden;
+  background: var(--paper);
+}
+#vis-distance .eq-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: min(1240px, calc(100% - 40px));
+}
+#vis-distance .eq-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+#vis-distance .eyebrow { margin: 0 0 6px; color: var(--canopy); font-size: 11px; letter-spacing: .17em; }
+#vis-distance h2 { max-width: 760px; font-size: clamp(28px, 2.6vw, 40px); line-height: 1.05; letter-spacing: -.045em; }
+#vis-distance h2 em { font-style: normal; color: var(--canopy); }
+#vis-distance .eq-lead { max-width: 420px; margin: 0; color: var(--canopy); font-size: 14px; line-height: 1.45; }
+
+#vis-distance .eq-controls {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(24, 62, 44, .16);
+  border-top: 5px solid var(--gold);
+  background: var(--white);
+}
+#vis-distance .eq-slider { min-width: 160px; }
+#vis-distance .eq-slider label { display: block; margin-bottom: 2px; font-size: 12px; font-weight: 800; }
+#vis-distance .eq-slider output { color: var(--canopy); }
+#vis-distance .eq-slider input { width: 160px; accent-color: var(--canopy); }
+#vis-distance .eq-count { margin-left: auto; color: var(--canopy); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+#vis-distance .eq-count strong { display: block; color: var(--forest); font-size: 22px; letter-spacing: 0; text-transform: none; }
+
+#vis-distance .eq-stage {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(280px, .85fr) minmax(360px, 1.15fr);
+  gap: 14px;
+}
+#vis-distance .eq-panel {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px 12px;
+  border: 1px solid rgba(24, 62, 44, .16);
+  background: var(--white);
+  box-shadow: 10px 10px 0 rgba(131, 185, 182, .22);
+}
+#vis-distance .eq-panel h3 { margin: 0 0 8px; font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--canopy); }
+#vis-distance .eq-plot { flex: 1; min-height: 0; }
+#vis-distance .eq-plot svg { display: block; width: 100%; height: 100%; }
+#vis-distance .eq-axis { color: var(--canopy); font-size: 11px; }
+#vis-distance .eq-axis text { fill: var(--canopy); }
+#vis-distance .eq-axis path, #vis-distance .eq-axis line { stroke: rgba(24, 62, 44, .35); }
+#vis-distance .eq-note { margin: 8px 0 0; color: var(--canopy); font-size: 12px; line-height: 1.35; }
+
+#vis-distance .eq-tip {
+  position: fixed;
+  display: none;
+  z-index: 30;
+  max-width: 240px;
+  padding: 10px 12px;
+  background: var(--forest);
+  color: var(--paper);
+  font-size: 12px;
+  line-height: 1.45;
+  pointer-events: none;
+  box-shadow: 8px 8px 0 rgba(131, 185, 182, .35);
+}
+#vis-distance .eq-tip strong { font-weight: 800; }
+
+@media (max-width: 900px) {
+  #vis-distance.workspace-section { overflow: auto; }
+  #vis-distance .eq-wrap { height: auto; }
+  #vis-distance .eq-head, #vis-distance .eq-controls, #vis-distance .eq-stage { display: block; }
+  #vis-distance .eq-lead { margin-top: 10px; max-width: none; }
+  #vis-distance .eq-slider { margin-bottom: 10px; }
+  #vis-distance .eq-count { margin: 4px 0 0; }
+  #vis-distance .eq-panel { min-height: 360px; margin-bottom: 14px; }
+}

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/vis-heat.css" />
     <link rel="stylesheet" href="css/vis-tree.css" />
+    <link rel="stylesheet" href="css/vis-equidistant.css" />
     <link rel="stylesheet" href="prototypes/Tree_Huggers_Four_Pages/canopy/canopy-map.css" />
   </head>
   <body>
@@ -151,6 +152,42 @@
           </div>
           <div id="vis-2-chart" role="img" aria-label="Tree of Atlanta tree canopy from the city to neighborhood planning units, census tracts, and block groups. Click a place to highlight that canopy range on the atlas."></div>
         </div>
+      </section>
+
+      <section class="workspace-section tone-paper" id="vis-distance" aria-labelledby="vis-distance-title">
+        <div class="wrap eq-wrap">
+          <div class="eq-head">
+            <div>
+              <p class="eyebrow">VISUALIZATION / DISTANCE</p>
+              <h2 id="vis-distance-title">Same distance from downtown. <em>Different shade.</em></h2>
+            </div>
+            <p class="eq-lead">Hold distance from Five Points steady, then compare HOLC grades. The ring keeps neighborhoods that sit a similar trip from downtown.</p>
+          </div>
+          <div class="eq-controls">
+            <div class="eq-slider">
+              <label for="eq-min">Inner ring <output id="eq-min-label" for="eq-min">3.0 km</output></label>
+              <input id="eq-min" type="range" min="500" max="14000" step="500" value="3000">
+            </div>
+            <div class="eq-slider">
+              <label for="eq-max">Outer ring <output id="eq-max-label" for="eq-max">6.0 km</output></label>
+              <input id="eq-max" type="range" min="1500" max="16000" step="500" value="6000">
+            </div>
+            <p class="eq-count">Rated block groups <strong id="eq-count">0</strong></p>
+          </div>
+          <div class="eq-stage">
+            <div class="eq-panel">
+              <h3>Where the ring falls</h3>
+              <div class="eq-plot" id="eq-map"></div>
+              <p class="eq-note">Color is the 1930s HOLC grade. Pale cells sit outside the ring or were never graded.</p>
+            </div>
+            <div class="eq-panel">
+              <h3>Heat, grade by grade</h3>
+              <div class="eq-plot" id="eq-bee"></div>
+              <p class="eq-note">Each dot is a block group inside the ring. Zero is the citywide surface-temperature average.</p>
+            </div>
+          </div>
+        </div>
+        <div class="eq-tip" id="eq-tip" role="tooltip"></div>
       </section>
 
       <section class="workspace-section tone-paper" id="vis-1" aria-labelledby="vis-1-title">
@@ -309,7 +346,6 @@
         </div>
       </section>
 
-<!-- if failed, delete this section -->
       <section class="closing-section" id="team" aria-labelledby="team-title">
         <div class="wrap closing-note">
           <div class="closing-message">
@@ -357,5 +393,6 @@
     <script src="prototypes/Tree_Huggers_Four_Pages/canopy/data.js"></script>
     <script src="prototypes/Tree_Huggers_Four_Pages/canopy/basemap.js"></script>
     <script src="prototypes/Tree_Huggers_Four_Pages/canopy/canopy-map.js"></script>
+    <script src="js/views/equidistant.js"></script>
   </body>
 </html>
