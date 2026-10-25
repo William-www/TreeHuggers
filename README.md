@@ -1,4 +1,4 @@
-# About
+# Tree Huggers🌲
 
 Atlanta calls itself the City in the Forest. But tree canopy, urban heat, and historic neighborhood grades are not evenly distributed.
 
