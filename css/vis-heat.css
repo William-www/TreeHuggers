@@ -1,0 +1,327 @@
+#vis-heat {
+  --ink: #1F2A2E;
+  --ink-soft: #55646A;
+  --mercury: #D7263D;
+  --mercury-dark: #A3172B;
+  --mercury-light: #F27C89;
+  --canopy: #2F6B47;
+  --asphalt: #33393C;
+  --sidewalk: #A9ADA6;
+  --display: "Nunito", system-ui, sans-serif;
+  --body: "Nunito", system-ui, sans-serif;
+}
+#vis-heat .page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+#vis-heat h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  max-width: 18ch;
+}
+#vis-heat .intro {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0 0 36px;
+  max-width: 52ch;
+}
+#vis-heat .stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+}
+#vis-heat .controls {
+  flex: 0 0 170px;
+  text-align: center;
+}
+#vis-heat .controls .prompt {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+#vis-heat #add-tree {
+  width: 124px;
+  height: 124px;
+  padding: 16px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 3px solid var(--canopy);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+#vis-heat #add-tree img,#vis-heat #add-tree svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+#vis-heat #add-tree:hover { background: #EEF6F0; transform: translateY(-2px); }
+#vis-heat #add-tree:active { transform: scale(0.96); }
+#vis-heat #add-tree:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  background: #FFFFFF;
+}
+#vis-heat #count {
+  margin: 12px 0 4px;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+#vis-heat #reset {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px;
+}
+#vis-heat button:focus-visible {
+  outline: 3px solid var(--canopy);
+  outline-offset: 3px;
+}
+#vis-heat .scene { 
+    position: relative; 
+    flex: 1 1 560px;
+    min-width: 0;
+    max-width: 560px;
+    height: 380px;
+    border-radius: 22px;
+    overflow: hidden; 
+}
+#vis-heat .sky {
+    position: absolute;
+    inset: 0; 
+    transition: opacity 1.2s ease;
+}
+#vis-heat .sky-hot { background: linear-gradient(#EE9B4F, #F8D7A3); }
+#vis-heat .sky-cool { background: linear-gradient(#C4E2EA, #EEF5EF); opacity: 0; }
+#vis-heat #sun { 
+    position: absolute;
+    top: 34px;
+    right: 56px;
+    width: 74px;
+    height: 74px;
+    border-radius: 50%; 
+    background: radial-gradient(circle at 40% 40%, #FFF4C8, #FFC94D 72%); 
+        
+        
+    transition: box-shadow 1.2s ease; 
+        
+        
+}
+#vis-heat .skyline {
+    position: absolute; 
+    left: 0; 
+    bottom: 52px;
+    width: 100%;
+    height: 150px;
+}
+#vis-heat .ground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 52px;
+    background: var(--asphalt); 
+}
+#vis-heat .ground::before { 
+    
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 12px;
+    background: var(--sidewalk);
+}
+#vis-heat .ground::after { 
+  content: "";
+  position: absolute;
+  top: 30px; left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #E9D8A6 0 28px, transparent 28px 56px);
+}
+#vis-heat #tree-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 42px;
+    top: 0;
+    pointer-events: none;
+}
+#vis-heat .readout {
+    position: absolute;
+    top: 22px;
+    left: 28px;
+    z-index: 6; 
+}
+#vis-heat #temp-readout {
+    font-family: var(--display);
+    font-weight: 700; 
+    font-size: 3rem; 
+    line-height: 1; 
+    font-variant-numeric: tabular-nums; 
+}
+#vis-heat #cover-readout {
+    margin-top: 4px;
+    font-size: 1rem;
+    opacity: 0.75;
+}
+#vis-heat .thermo {
+    position: absolute;
+    left: 28px;
+    bottom: 18px;
+    z-index: 5;
+    display: flex; 
+    align-items: flex-end; 
+    gap: 6px; 
+}
+#vis-heat .scale {
+    position: relative;
+    width: 34px;
+    height: 200px;
+    margin-bottom: 46px;   
+}
+#vis-heat .scale span {
+    position: absolute;
+    right: 0;
+    transform: translateY(50%); 
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+#vis-heat .scale span::after {
+    content:"";
+    width: 6px;
+    height: 2px;
+    background: var(--ink);
+}
+#vis-heat .glass {
+    width: 54px;
+}
+#vis-heat .tube {
+    position: relative;
+    width: 26px;
+    height: 200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.85);
+    border: 3px solid var(--ink);
+    border-bottom: 0;
+    border-radius: 13px 13px 0 0;
+    overflow: hidden;
+}
+#vis-heat #mercury {
+    position: absolute;
+    bottom: 0;
+    left: 4px;
+    right: 4px;
+    height: 75%;
+    border-radius: 7px 7px 0 0;
+    background: linear-gradient(90deg, var(--mercury-dark), var(--mercury) 40%, var(--mercury-light) 58%, var(--mercury) 80%); 
+        
+        
+    transition: height 1s linear;
+}
+#vis-heat .bulb {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    margin-top: -8px;
+    border-radius: 50%;
+    border: 3px solid var(--ink);
+    background: radial-gradient(circle at 35% 35%, var(--mercury-light), var(--mercury) 45%, var(--mercury-dark));
+}
+#vis-heat .bulb::before { 
+    
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    width: 12px;
+    height: 16px;
+    transform: translateX(-50%);
+    background: var(--mercury);
+}
+#vis-heat .tree {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    transform-origin: bottom center;
+    animation: vis7-plant 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+#vis-heat .tree img,#vis-heat .tree svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+@keyframes vis7-plant {
+  from { transform: translateX(-50%) scale(0); }
+  to { transform: translateX(-50%) scale(1); }
+}
+#vis-heat.workspace-section {
+  display: flex;
+  flex-direction: column;
+  padding: 86px 36px 28px;
+  overflow: hidden;
+}
+#vis-heat .page {
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+#vis-heat > .page > h2 {
+  flex: none;
+  font-size: clamp(32px, 3.4vw, 48px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  max-width: none;
+}
+#vis-heat .intro { flex: none; margin: 0 0 16px; max-width: none; }
+#vis-heat .stage { flex: 1; min-height: 0; align-items: stretch; width: 100%; }
+#vis-heat #chart-panel { flex: 0 1 32%; min-width: 280px; min-height: 0; display: flex; }
+#vis-heat .chart-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 18px 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(31, 42, 46, 0.12);
+  border-radius: 18px;
+}
+#vis-heat .chart-inner h3 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 0 0 4px;
+}
+#vis-heat .chart-inner p { margin: 0 0 8px; font-size: 0.95rem; color: var(--ink-soft); }
+#vis-heat #chart { flex: 1; min-height: 0; }
+#vis-heat #chart svg { display: block; width: 100%; height: 100%; }
+#vis-heat .scene { flex: 1 1 auto; max-width: none; height: auto; align-self: stretch; }
+#vis-heat .controls { align-self: center; }
+@media (max-width: 900px) {
+  #vis-heat.workspace-section { overflow: auto; height: auto; min-height: 100dvh; }
+  #vis-heat .stage { flex-wrap: wrap; }
+  #vis-heat .scene { flex-basis: 100%; height: 360px; }
+  #vis-heat #chart-panel { flex-basis: 100%; height: 360px; }
+}

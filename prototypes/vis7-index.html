@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trees and Street Heat</title>
+  <!-- pull fonts from Google fonts. Using Bricolage Grotesque for headings and Atkinson Hyperlegible for body text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Colors and fonts used across the page, defined once */
+:root {
+  --ink: #1F2A2E;
+  --ink-soft: #55646A;
+  --mercury: #D7263D;
+  --mercury-dark: #A3172B;
+  --mercury-light: #F27C89;
+  --canopy: #2F6B47;
+  --asphalt: #33393C;
+  --sidewalk: #A9ADA6;
+  --display: "Nunito", system-ui, sans-serif;
+  --body: "Nunito", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--body);
+  color: var(--ink);
+  background-color: #F6F0DD;
+}
+
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+h1 {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  max-width: 18ch;
+}
+.intro {
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0 0 36px;
+  max-width: 52ch;
+}
+
+/* The row: chart | scene | controls */
+.stage {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+}
+
+/* The add-tree control */
+.controls {
+  flex: 0 0 170px;
+  text-align: center;
+}
+.controls .prompt {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+#add-tree {
+  width: 124px;
+  height: 124px;
+  padding: 16px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 3px solid var(--canopy);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+#add-tree img,
+#add-tree svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+#add-tree:hover  { background: #EEF6F0; transform: translateY(-2px); }
+#add-tree:active { transform: scale(0.96); }
+#add-tree:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  background: #FFFFFF;
+}
+#count {
+  margin: 12px 0 4px;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+#reset {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Visible focus rings for keyboard users */
+button:focus-visible {
+  outline: 3px solid var(--canopy);
+  outline-offset: 3px;
+}
+
+/* Street Scene */
+.scene{ /* .something indicates "every element with class=something" */
+    position: relative; /* frame of reference for every layer inside of the scene */
+    flex: 1 1 560px;
+    min-width: 0;
+    max-width: 560px;
+    height: 380px;
+    border-radius: 22px;
+    overflow: hidden; /* crop anything that sticks out of the scene */
+}
+.sky {
+    position: absolute;
+    inset: 0; /* 0 means touch all 4 edges so the sky fills the whole scene */
+    transition: opacity 1.2s ease;
+}
+.sky-hot { background: linear-gradient(#EE9B4F, #F8D7A3); }
+.sky-cool { background: linear-gradient(#C4E2EA, #EEF5EF); opacity: 0; } /* set opacity = 0 to start so we can transition to cool sky later */
+
+#sun { /* #something indicates "the one element w id=something" */
+    position: absolute;
+    top: 34px;
+    right: 56px;
+    width: 74px;
+    height: 74px;
+    border-radius: 50%; /* turns the sun from a 74x74 px square into a circle by rounding its corners. at 50%, each corner curves halfway along each side --> circle */
+    background: radial-gradient(circle at 40% 40%, #FFF4C8, #FFC94D 72%); /* fills circle w color that spreads out from a point */
+        /* radial-gradient: color changes from center point outward, "circle" means gradient spreads evenly in all directions */
+        /* at 40% 40% places center 40% from the left and 40% from the top */
+    transition: box-shadow 1.2s ease; /* says that whenever the box-shadow chages, animate it over 1.2 seconds instead of jumping */
+        /* box-shadow is the glow around the sun */
+        /* 1.2s is how long each change takes, and "ease" makes this change start gently, speed up, then slow down again */
+}
+.skyline {
+    position: absolute; /* lets us place the skyline with exact distances from the scenes edges (bc scene has position: relative) */
+    left: 0; /* left edge of skyline goes at left edge of the scene */
+    bottom: 52px;
+    width: 100%;
+    height: 150px;
+}
+.ground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 52px;
+    background: var(--asphalt); /* set fill color saved under the name "--asphalt", which is define above at the root */
+}
+.ground::before { /* sidewalk */
+    /* before:: and after:: add extra decorative layers to one layer without more html. */
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 12px;
+    background: var(--sidewalk);
+}
+.ground::after { /* painted lane line */
+  content: "";
+  position: absolute;
+  top: 30px; left: 0; right: 0;
+  height: 3px;
+  background: repeating-linear-gradient(90deg, #E9D8A6 0 28px, transparent 28px 56px);
+}
+/* trees on the sidewalk */
+#tree-layer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 42px;
+    top: 0;
+    pointer-events: none;
+}
+
+/* Temperature readout */
+.readout {
+    position: absolute;
+    top: 22px;
+    left: 28px;
+    z-index: 6; /* sets stacking order. So 6 would come after, say, 2 */
+}
+#temp-readout {
+    font-family: var(--display);
+    font-weight: 700; /* 700 is bold */
+    font-size: 3rem; /* 3 times the page's base text size */
+    line-height: 1; /* each line takes up 1x the font size worth of vertical space */
+    font-variant-numeric: tabular-nums; /* makes every digit the same width so they don't shift as numbers change */
+}
+#cover-readout {
+    margin-top: 4px;
+    font-size: 1rem;
+    opacity: 0.75;
+}
+
+/* Thermometer */
+.thermo {
+    position: absolute;
+    left: 28px;
+    bottom: 18px;
+    z-index: 5;
+    display: flex; /* turns thermo into a "flex container": direct children are laid out from left to right, not top to bottom. Its two children are class="scale" and class="glass" */
+    align-items: flex-end; /* where the children sit vertically when they're diff heights. flex-end lines up bottom edges */
+    gap: 6px; /* put 6px of speace btwn the children, so the tick marks don't touch the glass */
+}
+.scale {
+    position: relative;
+    width: 34px;
+    height: 200px;
+    margin-bottom: 46px;   /* lines the labels up with the tube, not the bulb */
+}
+.scale span{
+    position: absolute;
+    right: 0;
+    transform: translateY(50%); /* move an element after it has been placed without disturbing other elems around it. This is used for centering the labels */
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.scale span::after{
+    content:"";
+    width: 6px;
+    height: 2px;
+    background: var(--ink);
+}
+.glass {
+    width: 54px;
+}
+.tube {
+    position: relative;
+    width: 26px;
+    height: 200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.85);
+    border: 3px solid var(--ink);
+    border-bottom: 0;
+    border-radius: 13px 13px 0 0;
+    overflow: hidden;
+}
+#mercury {
+    position: absolute;
+    bottom: 0;
+    left: 4px;
+    right: 4px;
+    height: 75%;
+    border-radius: 7px 7px 0 0;
+    background: linear-gradient(90deg, var(--mercury-dark), var(--mercury) 40%, var(--mercury-light) 58%, var(--mercury) 80%); /* make the flat color look round */
+        /* 90deg makes the colors blend side-to-side */
+        /* colors stops have the colors in order with their position across the columns width */
+    transition: height 1s linear;
+}
+.bulb {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    margin-top: -8px;
+    border-radius: 50%;
+    border: 3px solid var(--ink);
+    background: radial-gradient(circle at 35% 35%, var(--mercury-light), var(--mercury) 45%, var(--mercury-dark));
+}
+.bulb::before { /* use ::before for things that belong at the start or underneath, and ::after for things that belong at the end or on top. When positioning is absolute and nothing overlaps, pick either one */
+    /* joins the red column into the bulb */
+    content: "";
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    width: 12px;
+    height: 16px;
+    transform: translateX(-50%);
+    background: var(--mercury);
+} 
+
+/* Trees */
+.tree {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    transform-origin: bottom center;
+    animation: plant 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.tree img,
+.tree svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+@keyframes plant { /* grow each new tree from sizo 0 to fill size over 0.6 secs */
+  from { transform: translateX(-50%) scale(0); }
+  to   { transform: translateX(-50%) scale(1); }
+}
+
+/* Scatterplot panel */
+#chart-panel {
+  flex-shrink: 0;   /* keeps the chart from getting squeezed narrower */
+}
+
+.chart-inner {
+  width: 400px;
+  padding: 20px 20px 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(31, 42, 46, 0.12);
+  border-radius: 18px;
+}
+.chart-inner h2 {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  margin: 0 0 4px;
+}
+.chart-inner p {
+  margin: 0 0 8px;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+@media (max-width: 1250px) {
+  .stage { flex-wrap: wrap; }
+  .scene { flex-basis: 100%; }
+}
+@media (max-width: 700px) {
+  .page { padding: 32px 16px 120px; }
+  .scene { height: 340px; }
+  .chart-inner { width: calc(100vw - 32px); max-width: 400px; }
+  #chart-panel { max-width: 100%; }
+}
+
+  </style>
+</head> 
+
+<body>
+  <div class="page">
+    <h1>Why do we care about tree cover disparities?</h1>
+    <p class="intro">Plant trees along this block and watch what happens to the temperature</p>
+
+    <div class="stage">
+        <!-- Left: scatterplot, hidden until revealed w button-->
+        <div id="chart-panel">
+            <div class="chart-inner">
+                <h2>Tree coverage vs. temperature</h2>
+                <p>The green dot represents the amount of trees added</p>
+                <div id="chart"></div>
+            </div>
+        </div>
+
+        <!-- Middle: street scene -->
+        <div class="scene">
+            <div class="sky sky-hot"></div>
+            <div class="sky sky-cool" id="sky-cool"></div>
+            <div id="sun"></div>
+
+        <!-- City skyline silouhette-->
+        <svg class="skyline" viewBox="0 0 560 150" preserveAspectRatio="xMidYMax slice"> <!--viewBox is where we see the street scene (x, y position, then width and height) -->
+            <g fill="#1F2A2E" opacity="0.10"> <!-- make the back layer of buildings -->
+                <rect x="10"  y="40" width="50" height="110"/>
+                <rect x="70"  y="70" width="40" height="80"/>
+                <rect x="150" y="20" width="44" height="130"/>
+                <rect x="240" y="55" width="60" height="95"/>
+                <rect x="330" y="10" width="38" height="140"/>
+                <rect x="420" y="45" width="56" height="105"/>
+                <rect x="500" y="65" width="50" height="85"/>        
+            </g>
+            <g fill="#1F2A2E" opacity="0.16"> <!-- front layer -->
+                <rect x="40"  y="80"  width="58" height="70"/>
+                <rect x="120" y="60"  width="46" height="90"/>
+                <rect x="200" y="90"  width="64" height="60"/>
+                <rect x="290" y="70"  width="42" height="80"/>
+                <rect x="360" y="95"  width="70" height="55"/>
+                <rect x="460" y="75"  width="48" height="75"/>
+            </g>
+        </svg>
+
+        <div id="tree-layer"></div>
+        <div class="ground"></div>
+
+        <!-- Thermometer -->
+        <div class="readout">
+            <div id="temp-readout">95.0°F</div>
+            <div id="cover-readout">10% tree cover</div>
+        </div>
+
+        <div class="thermo">
+            <div class="scale" id="scale"></div>
+            <div class="glass">
+                <div class="tube"><div id="mercury"></div></div>
+                <div class="bulb"></div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Right: add-tree button-->
+        <div class="controls">
+            <p class="prompt">Add <span id="step-label">5</span>% more tree coverage</p>
+            <button id="add-tree"></button>
+            <p id="count">0 of 8 trees planted</p>
+            <button id="reset">Start over</button>
+        </div>
+
+    </div>
+  </div>
+
+  <script> // list of instructions the browser runs from top to bottom
+    // settings - can change for real data
+    const START_COVERAGE = 10; // tree coverage (%) before any trees are added
+    const STEP_PERCENT = 5; // coverage added per click
+    const START_TEMP     = 95;   // temperature (°F) before any clicks
+    const DROP_PER_STEP  = 1.5;  // degrees cooler per click  
+
+    // thermometer scale (temp changes at top and btotom of the tube)
+    const THERMO_MIN = 80;
+    const THERMO_MAX = 100;
+
+    // Scatterplot points. PLACEHOLDER values: replace with your real data.
+    const scatterData = [
+    { coverage: 3,  temp: 97.5 }, { coverage: 5,  temp: 96.0 },
+    { coverage: 6,  temp: 97.0 }, { coverage: 8,  temp: 95.2 },
+    { coverage: 10, temp: 95.8 }, { coverage: 12, temp: 94.1 },
+    { coverage: 14, temp: 94.9 }, { coverage: 16, temp: 92.8 },
+    { coverage: 18, temp: 93.6 }, { coverage: 21, temp: 91.9 },
+    { coverage: 23, temp: 92.7 }, { coverage: 25, temp: 90.4 },
+    { coverage: 28, temp: 91.2 }, { coverage: 30, temp: 89.3 },
+    { coverage: 33, temp: 89.9 }, { coverage: 36, temp: 87.6 },
+    { coverage: 38, temp: 88.5 }, { coverage: 41, temp: 86.8 },
+    { coverage: 45, temp: 85.9 }, { coverage: 50, temp: 84.2 }
+    ];
+
+
+    // Tree picture
+    const TREE_IMAGE = "tree_icon.png";
+
+    // Where each new tree is planted, in order.
+    // x = how far across the street (%), size = 1 is normal, 1.2 is 20% bigger.
+    const TREE_SPOTS = [
+    { x: 54, size: 1.00 }, { x: 78, size: 0.92 },
+    { x: 40, size: 0.86 }, { x: 88, size: 1.05 },
+    { x: 66, size: 0.80 }, { x: 47, size: 1.10 },
+    { x: 84, size: 0.76 }, { x: 31, size: 0.95 }
+    ];
+    const MAX_TREES = TREE_SPOTS.length;
+    const TREE_WIDTH = 118;       // width in pixels of a size-1 tree
+
+    // get the page elements needed
+    const addButton    = document.getElementById("add-tree");
+    const resetButton  = document.getElementById("reset");
+    const treeLayer    = document.getElementById("tree-layer");
+    const mercury      = document.getElementById("mercury");
+    const scale        = document.getElementById("scale");
+    const tempReadout  = document.getElementById("temp-readout");
+    const coverReadout = document.getElementById("cover-readout");
+    const countLabel   = document.getElementById("count");
+    const skyCool      = document.getElementById("sky-cool");
+    const sun          = document.getElementById("sun");
+    const chartPanel   = document.getElementById("chart-panel");
+    const chart        = document.getElementById("chart");
+
+    document.getElementById("step-label").textContent = STEP_PERCENT; // replace the step-label element's text (which we set to a default earlier) with the step size set in settings
+    
+    // State: a number that changes
+    let treesAdded = 0;
+
+    function currentCoverage() { return START_COVERAGE + treesAdded * STEP_PERCENT; }
+    function currentTemp() { return START_TEMP - treesAdded * DROP_PER_STEP; }
+
+    // Write the degree labels next to the tube
+    function buildScale() {
+    for (let t = THERMO_MIN; t <= THERMO_MAX; t += 5) { // loop to run the code inside 5 times, creating one lael each time
+        const label = document.createElement("span");
+        label.textContent = t + "°";
+        label.style.bottom = ((t - THERMO_MIN) / (THERMO_MAX - THERMO_MIN) * 100) + "%"; 
+            // The tube runs from 80° (empty) to 100° (full). At 95°, the formula gives (95 − 80) / (100 − 80) × 100 = 75, so the red column is 75% tall. At 89°, it is 45%.
+        scale.appendChild(label);
+        }
+    }
+
+    // redraw everything from current state
+    function update() {
+        const temp = currentTemp();
+
+        // Thermometer: turn the temp into percentage of the tube
+        let pct = (temp - THERMO_MIN) / (THERMO_MAX - THERMO_MIN) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        mercury.style.height = pct + "%";
+
+        tempReadout.textContent = temp.toFixed(1) + "°F";
+        coverReadout.textContent = currentCoverage() + "% tree cover";
+
+        countLabel.textContent = `${treesAdded} of ${MAX_TREES} trees planted`;
+        addButton.disabled = treesAdded >= MAX_TREES; // greys out add tree button
+
+        // cool the scene: change sky color
+        const cool = treesAdded / MAX_TREES;
+        const heat = 1 - cool;
+        skyCool.style.opacity = cool;
+
+        drawChart();
+    }
+// make one tree
+function makeTreePicture() {
+    const img = document.createElement("img");
+    img.src = TREE_IMAGE;
+    img.onerror = function () {
+        console.warn("Could not load TREE_IMAGE '" + TREE_IMAGE);
+    };
+    return img;
+}
+// clicking the tree button
+addButton.addEventListener("click", function () {
+    if (treesAdded >= MAX_TREES) return;
+    
+    const spot = TREE_SPOTS[treesAdded];
+    const tree = document.createElement("div");
+    tree.className = "tree";
+    tree.style.left = spot.x + "%";
+    tree.style.width = (TREE_WIDTH * spot.size) + "px";
+    tree.style.zIndex = Math.round(spot.size * 10);
+    tree.appendChild(makeTreePicture());
+    treeLayer.appendChild(tree);
+
+    treesAdded = treesAdded + 1;
+    update();
+});
+
+// start over
+resetButton.addEventListener("click", function () {
+  treeLayer.innerHTML = "";
+  treesAdded = 0;
+  update();
+});
+
+// draw the scatterplot as an svg
+const X_MAX = 60;   // coverage axis runs from 0% to 60%
+
+function drawChart() {
+  const W = 400, H = 300, pad = 45;
+
+  // Turn a data value into a position in the drawing
+  const x = v => pad + v / X_MAX * (W - 2 * pad);
+  const y = v => H - pad - (v - THERMO_MIN) / (THERMO_MAX - THERMO_MIN) * (H - 2 * pad);
+
+  // Best-fit line (least squares)
+  const n = scatterData.length;
+  const meanX = scatterData.reduce((sum, d) => sum + d.coverage, 0) / n;
+  const meanY = scatterData.reduce((sum, d) => sum + d.temp, 0) / n;
+  let num = 0, den = 0;
+  for (const d of scatterData) {
+    num += (d.coverage - meanX) * (d.temp - meanY);
+    den += (d.coverage - meanX) ** 2;
+  }
+  const slope = num / den;
+  const intercept = meanY - slope * meanX;
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" font-size="11" fill="#55646A">`;
+
+  // Axes and their titles
+  svg += `<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#1F2A2E"/>`;
+  svg += `<line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H - pad}" stroke="#1F2A2E"/>`;
+  svg += `<text x="${W / 2}" y="${H - 8}" text-anchor="middle" font-size="13" fill="#1F2A2E">Tree coverage</text>`;
+  svg += `<text x="${pad}" y="${pad - 14}" text-anchor="middle" font-size="13" fill="#1F2A2E">Temp (°F)</text>`;
+
+  // Tick labels
+  for (let t = 0; t <= X_MAX; t += 10) {
+    svg += `<text x="${x(t)}" y="${H - pad + 18}" text-anchor="middle">${t}%</text>`;
+  }
+  for (let t = THERMO_MIN; t <= THERMO_MAX; t += 5) {
+    svg += `<text x="${pad - 8}" y="${y(t) + 4}" text-anchor="end">${t}°</text>`;
+  }
+
+  // Trend line, from 0% to X_MAX
+  svg += `<line x1="${x(0)}" y1="${y(intercept)}" x2="${x(X_MAX)}" y2="${y(intercept + slope * X_MAX)}" stroke="#D7263D" stroke-width="2.5"/>`;
+
+  // One dot per neighborhood
+  for (const d of scatterData) {
+    svg += `<circle cx="${x(d.coverage)}" cy="${y(d.temp)}" r="4.5" fill="#1F2A2E" fill-opacity="0.55"/>`;
+  }
+
+  // Your block
+  svg += `<circle cx="${x(currentCoverage())}" cy="${y(currentTemp())}" r="8" fill="#2F6B47" stroke="white" stroke-width="2.5"/>`;
+
+  chart.innerHTML = svg + `</svg>`;
+}
+
+// setup for when the page first loads
+addButton.appendChild(makeTreePicture());
+buildScale();
+update();
+
+  </script>
+</body>
+</html>
