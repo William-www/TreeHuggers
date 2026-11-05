@@ -1,43 +1,485 @@
 // list of instructions the browser runs from top to bottom
-    // settings - can change for real data
-    const START_COVERAGE = 10; // tree coverage (%) before any trees are added
-    const STEP_PERCENT = 5; // coverage added per click
-    const START_TEMP     = 95;   // temperature (°F) before any clicks
-    const DROP_PER_STEP  = 1.5;  // degrees cooler per click  
+  // ---------- REAL DATA: City of Atlanta, Tree Equity Score (American Forests) ----------
+  // 434 census block groups. coverage = treecanopy x 100 (%).
+  // temp = temp_diff: summer heat compared with the Atlanta-area average
+  //        (positive = hotter than average, negative = cooler).
+ 
+  // Thermometer and chart scale (covers every block group: -9.8 to 18.3)
+  const THERMO_MIN = -10;
+  const THERMO_MAX = 20;
 
-    // thermometer scale (temp changes at top and btotom of the tube)
-    const THERMO_MIN = 80;
-    const THERMO_MAX = 100;
-
-    // Scatterplot points. PLACEHOLDER values: replace with your real data.
-    const scatterData = [
-    { coverage: 3,  temp: 97.5 }, { coverage: 5,  temp: 96.0 },
-    { coverage: 6,  temp: 97.0 }, { coverage: 8,  temp: 95.2 },
-    { coverage: 10, temp: 95.8 }, { coverage: 12, temp: 94.1 },
-    { coverage: 14, temp: 94.9 }, { coverage: 16, temp: 92.8 },
-    { coverage: 18, temp: 93.6 }, { coverage: 21, temp: 91.9 },
-    { coverage: 23, temp: 92.7 }, { coverage: 25, temp: 90.4 },
-    { coverage: 28, temp: 91.2 }, { coverage: 30, temp: 89.3 },
-    { coverage: 33, temp: 89.9 }, { coverage: 36, temp: 87.6 },
-    { coverage: 38, temp: 88.5 }, { coverage: 41, temp: 86.8 },
-    { coverage: 45, temp: 85.9 }, { coverage: 50, temp: 84.2 }
-    ];
+  const scatterData = [
+    { coverage: 7.0, temp: 17.50 },
+    { coverage: 7.3, temp: 18.27 },
+    { coverage: 7.8, temp: 8.14 },
+    { coverage: 8.7, temp: 9.64 },
+    { coverage: 9.6, temp: 12.85 },
+    { coverage: 9.8, temp: 15.57 },
+    { coverage: 10.4, temp: 13.23 },
+    { coverage: 10.7, temp: 12.13 },
+    { coverage: 10.8, temp: 11.57 },
+    { coverage: 11.2, temp: 10.86 },
+    { coverage: 11.3, temp: 11.14 },
+    { coverage: 12.3, temp: 11.23 },
+    { coverage: 12.3, temp: 13.31 },
+    { coverage: 12.7, temp: 8.91 },
+    { coverage: 13.0, temp: 5.95 },
+    { coverage: 13.0, temp: 11.50 },
+    { coverage: 13.1, temp: 13.60 },
+    { coverage: 13.2, temp: 11.49 },
+    { coverage: 13.2, temp: 14.93 },
+    { coverage: 13.3, temp: 13.73 },
+    { coverage: 13.7, temp: 10.67 },
+    { coverage: 13.8, temp: 9.50 },
+    { coverage: 15.0, temp: 12.76 },
+    { coverage: 15.7, temp: 10.12 },
+    { coverage: 16.0, temp: 13.17 },
+    { coverage: 16.3, temp: 14.54 },
+    { coverage: 16.5, temp: 13.71 },
+    { coverage: 16.6, temp: 8.92 },
+    { coverage: 17.0, temp: 10.91 },
+    { coverage: 17.2, temp: 11.57 },
+    { coverage: 17.4, temp: 6.43 },
+    { coverage: 17.4, temp: 8.77 },
+    { coverage: 17.4, temp: 10.99 },
+    { coverage: 17.5, temp: 10.83 },
+    { coverage: 17.6, temp: 11.30 },
+    { coverage: 17.6, temp: 15.01 },
+    { coverage: 17.6, temp: 11.71 },
+    { coverage: 17.7, temp: 12.23 },
+    { coverage: 17.9, temp: 9.47 },
+    { coverage: 18.3, temp: 10.49 },
+    { coverage: 18.8, temp: 11.24 },
+    { coverage: 18.9, temp: 9.89 },
+    { coverage: 19.2, temp: 10.87 },
+    { coverage: 19.4, temp: 12.12 },
+    { coverage: 19.5, temp: 6.04 },
+    { coverage: 19.7, temp: 16.19 },
+    { coverage: 19.9, temp: 11.01 },
+    { coverage: 19.9, temp: 10.29 },
+    { coverage: 20.1, temp: 9.74 },
+    { coverage: 20.8, temp: 9.98 },
+    { coverage: 20.9, temp: 6.61 },
+    { coverage: 21.0, temp: 11.86 },
+    { coverage: 22.4, temp: 10.17 },
+    { coverage: 22.8, temp: 10.18 },
+    { coverage: 22.9, temp: 12.80 },
+    { coverage: 23.0, temp: 7.82 },
+    { coverage: 23.5, temp: 6.25 },
+    { coverage: 24.1, temp: 8.81 },
+    { coverage: 24.5, temp: 8.55 },
+    { coverage: 25.0, temp: 9.62 },
+    { coverage: 25.2, temp: 10.76 },
+    { coverage: 25.2, temp: 8.87 },
+    { coverage: 25.2, temp: 6.42 },
+    { coverage: 25.4, temp: 12.06 },
+    { coverage: 25.5, temp: 5.04 },
+    { coverage: 25.7, temp: 10.33 },
+    { coverage: 26.7, temp: 8.77 },
+    { coverage: 26.8, temp: 4.57 },
+    { coverage: 26.8, temp: 7.51 },
+    { coverage: 26.9, temp: 8.26 },
+    { coverage: 27.1, temp: 13.03 },
+    { coverage: 27.5, temp: 10.58 },
+    { coverage: 27.6, temp: 7.41 },
+    { coverage: 27.7, temp: 9.67 },
+    { coverage: 28.0, temp: 9.75 },
+    { coverage: 28.2, temp: 10.06 },
+    { coverage: 28.7, temp: 9.60 },
+    { coverage: 28.7, temp: 8.99 },
+    { coverage: 28.8, temp: 8.00 },
+    { coverage: 29.0, temp: 8.16 },
+    { coverage: 29.0, temp: 10.13 },
+    { coverage: 29.3, temp: 10.50 },
+    { coverage: 29.5, temp: 10.36 },
+    { coverage: 29.5, temp: 12.44 },
+    { coverage: 29.7, temp: 12.94 },
+    { coverage: 30.1, temp: 7.65 },
+    { coverage: 30.2, temp: 10.96 },
+    { coverage: 30.2, temp: 8.63 },
+    { coverage: 30.2, temp: 7.24 },
+    { coverage: 30.3, temp: 7.28 },
+    { coverage: 30.5, temp: 7.49 },
+    { coverage: 30.6, temp: 5.18 },
+    { coverage: 30.6, temp: 7.28 },
+    { coverage: 30.7, temp: 7.07 },
+    { coverage: 30.9, temp: 4.40 },
+    { coverage: 30.9, temp: 7.02 },
+    { coverage: 30.9, temp: 9.77 },
+    { coverage: 31.0, temp: 8.04 },
+    { coverage: 31.1, temp: 11.08 },
+    { coverage: 31.2, temp: 7.06 },
+    { coverage: 31.2, temp: 7.11 },
+    { coverage: 31.3, temp: 6.70 },
+    { coverage: 31.4, temp: 9.85 },
+    { coverage: 31.8, temp: 8.52 },
+    { coverage: 31.9, temp: 8.43 },
+    { coverage: 31.9, temp: 8.20 },
+    { coverage: 32.5, temp: 8.24 },
+    { coverage: 32.5, temp: 5.79 },
+    { coverage: 32.6, temp: 9.69 },
+    { coverage: 33.0, temp: 9.66 },
+    { coverage: 33.0, temp: 5.37 },
+    { coverage: 33.1, temp: -0.37 },
+    { coverage: 33.8, temp: 5.79 },
+    { coverage: 33.8, temp: 8.97 },
+    { coverage: 34.0, temp: 14.03 },
+    { coverage: 34.1, temp: 6.65 },
+    { coverage: 34.2, temp: 5.49 },
+    { coverage: 34.4, temp: 9.46 },
+    { coverage: 34.4, temp: 8.19 },
+    { coverage: 34.8, temp: 4.53 },
+    { coverage: 34.9, temp: 5.67 },
+    { coverage: 35.2, temp: 8.14 },
+    { coverage: 35.2, temp: 8.14 },
+    { coverage: 35.3, temp: 5.62 },
+    { coverage: 35.7, temp: 10.77 },
+    { coverage: 35.9, temp: 13.71 },
+    { coverage: 35.9, temp: 3.95 },
+    { coverage: 36.0, temp: 6.49 },
+    { coverage: 36.3, temp: 5.79 },
+    { coverage: 36.6, temp: 3.84 },
+    { coverage: 36.7, temp: 3.21 },
+    { coverage: 36.8, temp: 5.72 },
+    { coverage: 37.0, temp: 6.16 },
+    { coverage: 37.2, temp: 9.50 },
+    { coverage: 37.2, temp: 8.79 },
+    { coverage: 37.7, temp: 11.13 },
+    { coverage: 37.9, temp: -0.60 },
+    { coverage: 38.0, temp: -1.10 },
+    { coverage: 38.0, temp: 5.44 },
+    { coverage: 38.1, temp: 3.54 },
+    { coverage: 38.2, temp: 7.08 },
+    { coverage: 38.8, temp: 4.23 },
+    { coverage: 39.0, temp: 5.46 },
+    { coverage: 39.0, temp: 6.29 },
+    { coverage: 39.1, temp: 2.42 },
+    { coverage: 39.3, temp: 1.69 },
+    { coverage: 39.4, temp: 6.09 },
+    { coverage: 39.5, temp: 6.56 },
+    { coverage: 40.2, temp: 4.96 },
+    { coverage: 40.5, temp: 4.38 },
+    { coverage: 40.5, temp: 5.31 },
+    { coverage: 40.5, temp: 7.45 },
+    { coverage: 40.6, temp: 4.60 },
+    { coverage: 40.6, temp: 2.16 },
+    { coverage: 40.7, temp: 5.88 },
+    { coverage: 40.7, temp: 0.89 },
+    { coverage: 40.7, temp: 7.46 },
+    { coverage: 40.7, temp: 6.03 },
+    { coverage: 41.2, temp: 0.90 },
+    { coverage: 41.2, temp: 4.26 },
+    { coverage: 41.4, temp: 5.96 },
+    { coverage: 41.4, temp: 2.38 },
+    { coverage: 41.5, temp: 8.39 },
+    { coverage: 41.8, temp: 9.49 },
+    { coverage: 41.9, temp: 4.73 },
+    { coverage: 42.1, temp: 3.49 },
+    { coverage: 42.2, temp: 0.58 },
+    { coverage: 42.4, temp: 3.30 },
+    { coverage: 42.5, temp: 5.10 },
+    { coverage: 42.5, temp: 4.68 },
+    { coverage: 42.6, temp: 3.07 },
+    { coverage: 42.8, temp: 4.81 },
+    { coverage: 43.0, temp: 2.87 },
+    { coverage: 43.1, temp: 5.06 },
+    { coverage: 43.1, temp: 2.95 },
+    { coverage: 43.2, temp: 0.75 },
+    { coverage: 43.3, temp: 2.71 },
+    { coverage: 43.5, temp: 3.80 },
+    { coverage: 43.6, temp: 4.00 },
+    { coverage: 44.1, temp: 2.78 },
+    { coverage: 44.2, temp: 10.31 },
+    { coverage: 44.3, temp: -1.03 },
+    { coverage: 44.3, temp: 11.33 },
+    { coverage: 44.3, temp: 3.64 },
+    { coverage: 44.4, temp: 3.44 },
+    { coverage: 44.4, temp: 3.29 },
+    { coverage: 44.7, temp: 5.51 },
+    { coverage: 45.0, temp: 3.09 },
+    { coverage: 45.1, temp: -1.27 },
+    { coverage: 45.2, temp: 3.80 },
+    { coverage: 45.3, temp: -1.00 },
+    { coverage: 45.4, temp: 1.79 },
+    { coverage: 45.8, temp: 0.77 },
+    { coverage: 46.0, temp: 1.95 },
+    { coverage: 46.0, temp: 7.79 },
+    { coverage: 46.2, temp: -0.44 },
+    { coverage: 46.2, temp: 6.84 },
+    { coverage: 46.3, temp: 1.82 },
+    { coverage: 46.5, temp: 3.28 },
+    { coverage: 46.6, temp: 3.93 },
+    { coverage: 46.6, temp: 4.83 },
+    { coverage: 46.6, temp: 2.65 },
+    { coverage: 47.0, temp: 3.89 },
+    { coverage: 47.1, temp: 2.80 },
+    { coverage: 47.3, temp: 8.93 },
+    { coverage: 47.6, temp: 3.57 },
+    { coverage: 47.6, temp: 1.98 },
+    { coverage: 47.7, temp: 2.64 },
+    { coverage: 47.9, temp: 4.59 },
+    { coverage: 47.9, temp: 1.13 },
+    { coverage: 48.1, temp: -0.07 },
+    { coverage: 48.2, temp: 4.72 },
+    { coverage: 48.4, temp: 3.46 },
+    { coverage: 48.4, temp: -5.27 },
+    { coverage: 48.5, temp: -2.13 },
+    { coverage: 48.6, temp: 2.76 },
+    { coverage: 48.7, temp: 2.17 },
+    { coverage: 48.8, temp: -4.93 },
+    { coverage: 48.8, temp: 0.72 },
+    { coverage: 48.9, temp: -1.88 },
+    { coverage: 49.0, temp: -2.98 },
+    { coverage: 49.1, temp: 4.23 },
+    { coverage: 49.2, temp: -1.17 },
+    { coverage: 49.3, temp: 2.13 },
+    { coverage: 49.4, temp: -0.63 },
+    { coverage: 49.5, temp: 0.85 },
+    { coverage: 49.5, temp: 4.10 },
+    { coverage: 49.7, temp: 0.85 },
+    { coverage: 49.9, temp: 3.91 },
+    { coverage: 49.9, temp: -0.47 },
+    { coverage: 49.9, temp: 2.74 },
+    { coverage: 50.1, temp: -0.53 },
+    { coverage: 50.2, temp: 1.97 },
+    { coverage: 50.3, temp: -3.39 },
+    { coverage: 50.5, temp: 4.44 },
+    { coverage: 51.0, temp: 2.45 },
+    { coverage: 51.0, temp: 3.82 },
+    { coverage: 51.2, temp: 0.02 },
+    { coverage: 51.2, temp: 3.16 },
+    { coverage: 51.4, temp: 1.47 },
+    { coverage: 51.5, temp: -2.19 },
+    { coverage: 51.6, temp: 0.14 },
+    { coverage: 51.7, temp: 1.52 },
+    { coverage: 51.8, temp: -1.29 },
+    { coverage: 51.8, temp: -2.86 },
+    { coverage: 51.9, temp: 2.66 },
+    { coverage: 51.9, temp: 4.91 },
+    { coverage: 52.0, temp: 2.11 },
+    { coverage: 52.1, temp: 5.19 },
+    { coverage: 52.5, temp: 2.28 },
+    { coverage: 52.9, temp: 3.04 },
+    { coverage: 52.9, temp: -0.33 },
+    { coverage: 53.0, temp: 1.60 },
+    { coverage: 53.0, temp: -1.91 },
+    { coverage: 53.0, temp: 0.83 },
+    { coverage: 53.1, temp: -0.17 },
+    { coverage: 53.2, temp: -2.99 },
+    { coverage: 53.2, temp: -0.58 },
+    { coverage: 53.2, temp: -0.22 },
+    { coverage: 53.2, temp: -4.94 },
+    { coverage: 53.3, temp: -1.62 },
+    { coverage: 53.3, temp: -0.10 },
+    { coverage: 53.3, temp: 0.83 },
+    { coverage: 53.4, temp: 1.87 },
+    { coverage: 53.4, temp: 0.79 },
+    { coverage: 54.0, temp: -0.83 },
+    { coverage: 54.0, temp: -1.10 },
+    { coverage: 54.5, temp: 2.65 },
+    { coverage: 54.5, temp: 5.52 },
+    { coverage: 54.6, temp: -0.42 },
+    { coverage: 54.6, temp: -2.56 },
+    { coverage: 54.7, temp: 0.75 },
+    { coverage: 54.7, temp: -0.49 },
+    { coverage: 54.7, temp: -1.14 },
+    { coverage: 54.8, temp: -3.54 },
+    { coverage: 54.8, temp: -2.24 },
+    { coverage: 54.8, temp: 0.76 },
+    { coverage: 54.8, temp: 0.70 },
+    { coverage: 54.9, temp: -0.51 },
+    { coverage: 55.0, temp: 0.38 },
+    { coverage: 55.0, temp: 0.08 },
+    { coverage: 55.2, temp: 0.33 },
+    { coverage: 55.4, temp: -1.88 },
+    { coverage: 55.4, temp: -2.18 },
+    { coverage: 55.5, temp: 0.01 },
+    { coverage: 55.5, temp: -4.50 },
+    { coverage: 55.5, temp: -2.70 },
+    { coverage: 55.5, temp: -1.92 },
+    { coverage: 55.6, temp: -2.47 },
+    { coverage: 55.8, temp: -1.72 },
+    { coverage: 55.8, temp: -3.35 },
+    { coverage: 55.9, temp: 0.23 },
+    { coverage: 56.0, temp: -1.18 },
+    { coverage: 56.0, temp: 0.44 },
+    { coverage: 56.3, temp: -1.58 },
+    { coverage: 56.5, temp: -3.16 },
+    { coverage: 56.7, temp: -3.08 },
+    { coverage: 56.8, temp: -2.47 },
+    { coverage: 56.8, temp: -2.74 },
+    { coverage: 57.0, temp: -1.95 },
+    { coverage: 57.1, temp: -2.30 },
+    { coverage: 57.2, temp: -1.99 },
+    { coverage: 57.3, temp: -2.81 },
+    { coverage: 57.3, temp: -0.02 },
+    { coverage: 57.4, temp: 0.95 },
+    { coverage: 57.5, temp: 0.06 },
+    { coverage: 57.7, temp: -2.30 },
+    { coverage: 57.8, temp: -3.60 },
+    { coverage: 57.8, temp: 0.83 },
+    { coverage: 57.9, temp: -0.44 },
+    { coverage: 58.0, temp: -1.50 },
+    { coverage: 58.1, temp: -0.69 },
+    { coverage: 58.2, temp: 0.15 },
+    { coverage: 58.5, temp: -3.39 },
+    { coverage: 58.6, temp: -2.84 },
+    { coverage: 58.7, temp: -2.36 },
+    { coverage: 58.8, temp: -4.52 },
+    { coverage: 58.9, temp: -3.42 },
+    { coverage: 59.0, temp: -4.35 },
+    { coverage: 59.1, temp: -3.31 },
+    { coverage: 59.1, temp: -3.17 },
+    { coverage: 59.4, temp: -5.37 },
+    { coverage: 59.4, temp: 0.09 },
+    { coverage: 59.4, temp: -2.69 },
+    { coverage: 59.5, temp: -2.38 },
+    { coverage: 59.5, temp: -0.66 },
+    { coverage: 59.6, temp: -1.34 },
+    { coverage: 59.7, temp: -0.87 },
+    { coverage: 60.0, temp: -3.44 },
+    { coverage: 60.0, temp: -1.35 },
+    { coverage: 60.0, temp: -4.18 },
+    { coverage: 60.0, temp: -3.88 },
+    { coverage: 60.3, temp: -1.69 },
+    { coverage: 60.3, temp: -3.02 },
+    { coverage: 60.4, temp: -4.50 },
+    { coverage: 60.6, temp: -3.20 },
+    { coverage: 60.6, temp: -0.10 },
+    { coverage: 60.7, temp: -3.52 },
+    { coverage: 60.7, temp: -2.32 },
+    { coverage: 60.7, temp: 2.67 },
+    { coverage: 60.7, temp: -3.35 },
+    { coverage: 60.8, temp: -2.83 },
+    { coverage: 60.8, temp: 1.12 },
+    { coverage: 60.9, temp: -3.49 },
+    { coverage: 60.9, temp: -3.27 },
+    { coverage: 61.3, temp: -4.96 },
+    { coverage: 61.3, temp: -4.47 },
+    { coverage: 61.4, temp: -3.92 },
+    { coverage: 61.5, temp: -3.69 },
+    { coverage: 61.5, temp: -0.66 },
+    { coverage: 62.2, temp: -4.28 },
+    { coverage: 62.3, temp: -5.25 },
+    { coverage: 62.8, temp: -2.81 },
+    { coverage: 62.8, temp: -3.85 },
+    { coverage: 62.8, temp: -5.60 },
+    { coverage: 63.0, temp: -4.89 },
+    { coverage: 63.2, temp: -3.57 },
+    { coverage: 63.2, temp: -3.92 },
+    { coverage: 63.3, temp: -4.27 },
+    { coverage: 63.3, temp: -3.96 },
+    { coverage: 63.3, temp: -4.07 },
+    { coverage: 63.5, temp: -2.36 },
+    { coverage: 63.6, temp: -4.16 },
+    { coverage: 63.6, temp: -6.52 },
+    { coverage: 63.8, temp: -5.42 },
+    { coverage: 63.8, temp: -5.93 },
+    { coverage: 64.0, temp: -3.44 },
+    { coverage: 64.1, temp: -3.76 },
+    { coverage: 64.1, temp: -3.48 },
+    { coverage: 64.2, temp: -1.19 },
+    { coverage: 64.4, temp: -4.87 },
+    { coverage: 64.6, temp: -4.35 },
+    { coverage: 64.7, temp: -7.23 },
+    { coverage: 64.7, temp: -4.07 },
+    { coverage: 65.2, temp: -8.75 },
+    { coverage: 65.5, temp: -5.31 },
+    { coverage: 65.6, temp: -3.19 },
+    { coverage: 65.8, temp: -7.20 },
+    { coverage: 66.1, temp: -5.93 },
+    { coverage: 66.1, temp: -2.23 },
+    { coverage: 66.2, temp: -5.67 },
+    { coverage: 66.3, temp: -4.39 },
+    { coverage: 66.3, temp: -4.03 },
+    { coverage: 66.3, temp: -3.01 },
+    { coverage: 66.5, temp: -5.19 },
+    { coverage: 66.6, temp: -3.86 },
+    { coverage: 66.6, temp: -2.32 },
+    { coverage: 66.6, temp: -4.30 },
+    { coverage: 66.8, temp: -4.17 },
+    { coverage: 67.3, temp: -6.00 },
+    { coverage: 67.3, temp: -3.81 },
+    { coverage: 67.4, temp: -6.65 },
+    { coverage: 67.4, temp: -8.29 },
+    { coverage: 67.6, temp: -5.75 },
+    { coverage: 67.7, temp: -6.17 },
+    { coverage: 67.8, temp: -3.41 },
+    { coverage: 68.2, temp: -6.11 },
+    { coverage: 68.5, temp: -6.16 },
+    { coverage: 68.6, temp: -6.17 },
+    { coverage: 68.7, temp: -5.85 },
+    { coverage: 68.8, temp: -8.57 },
+    { coverage: 68.9, temp: -7.87 },
+    { coverage: 69.0, temp: -7.40 },
+    { coverage: 69.2, temp: -6.68 },
+    { coverage: 69.3, temp: -5.55 },
+    { coverage: 69.5, temp: -6.36 },
+    { coverage: 69.7, temp: -7.83 },
+    { coverage: 70.1, temp: -4.56 },
+    { coverage: 70.2, temp: -5.94 },
+    { coverage: 70.2, temp: -7.16 },
+    { coverage: 70.4, temp: -5.05 },
+    { coverage: 70.7, temp: -4.93 },
+    { coverage: 70.9, temp: -5.62 },
+    { coverage: 71.1, temp: -6.31 },
+    { coverage: 71.1, temp: -6.82 },
+    { coverage: 71.1, temp: -6.95 },
+    { coverage: 71.4, temp: -6.50 },
+    { coverage: 71.4, temp: -7.51 },
+    { coverage: 72.2, temp: -4.41 },
+    { coverage: 72.2, temp: -6.81 },
+    { coverage: 72.7, temp: -5.32 },
+    { coverage: 72.9, temp: -7.39 },
+    { coverage: 72.9, temp: -8.35 },
+    { coverage: 73.2, temp: -4.27 },
+    { coverage: 73.6, temp: -6.80 },
+    { coverage: 74.4, temp: -7.89 },
+    { coverage: 75.1, temp: -9.81 },
+    { coverage: 75.9, temp: -7.11 },
+    { coverage: 76.5, temp: -8.37 },
+    { coverage: 77.1, temp: -8.14 },
+    { coverage: 77.3, temp: -6.02 },
+    { coverage: 78.2, temp: -9.72 },
+    { coverage: 78.6, temp: -8.64 },
+    { coverage: 81.8, temp: -9.45 },
+  ];
 
 
     // Tree picture
-    const TREE_IMAGE = "prototypes/tree_icon.png";
+    const TREE_IMAGE = "assets/heat/Tree_02_Lime.png";
 
     // Where each new tree is planted, in order.
     // x = how far across the street (%), size = 1 is normal, 1.2 is 20% bigger.
     const TREE_SPOTS = [
-    { x: 54, size: 1.00 }, { x: 78, size: 0.92 },
-    { x: 40, size: 0.86 }, { x: 88, size: 1.05 },
-    { x: 66, size: 0.80 }, { x: 47, size: 1.10 },
-    { x: 84, size: 0.76 }, { x: 31, size: 0.95 }
+      { x: 54, size: 1.00 }, { x: 80, size: 0.92 },
+      { x: 38, size: 0.88 }, { x: 90, size: 1.05 },
+      { x: 67, size: 0.84 }, { x: 46, size: 1.10 }
     ];
     const MAX_TREES = TREE_SPOTS.length;
     const TREE_WIDTH = 118;       // width in pixels of a size-1 tree
 
+    // ---------- Steps taken from the real data ----------
+  const coverages    = scatterData.map(d => d.coverage);
+  const MIN_COVERAGE = Math.min(...coverages);
+  const MAX_COVERAGE = Math.max(...coverages);
+  const STEP_PERCENT = (MAX_COVERAGE - MIN_COVERAGE) / MAX_TREES;   // about 12.5% with 6 trees
+
+  // The middle value of a list of numbers
+  function median(values) {
+    const sorted = [...values].sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+
+  function currentCoverage() { return MIN_COVERAGE + treesAdded * STEP_PERCENT; }
+
+  // Typical heat of real block groups with about this much canopy
+  function currentTemp() {
+    const c = currentCoverage();
+    const similar = scatterData.filter(d => Math.abs(d.coverage - c) <= STEP_PERCENT / 2);
+    return median(similar.map(d => d.temp));
+  }
     // get the page elements needed
     const addButton    = document.getElementById("add-tree");
     const resetButton  = document.getElementById("reset");
@@ -49,16 +491,10 @@
     const countLabel   = document.getElementById("count");
     const skyCool      = document.getElementById("sky-cool");
     const sun          = document.getElementById("sun");
-    const chartPanel   = document.getElementById("chart-panel");
     const chart        = document.getElementById("chart");
-
-    document.getElementById("step-label").textContent = STEP_PERCENT; // replace the step-label element's text (which we set to a default earlier) with the step size set in settings
     
     // State: a number that changes
     let treesAdded = 0;
-
-    function currentCoverage() { return START_COVERAGE + treesAdded * STEP_PERCENT; }
-    function currentTemp() { return START_TEMP - treesAdded * DROP_PER_STEP; }
 
     // Write the degree labels next to the tube
     function buildScale() {
@@ -80,8 +516,8 @@
         pct = Math.max(0, Math.min(100, pct));
         mercury.style.height = pct + "%";
 
-        tempReadout.textContent = temp.toFixed(1) + "°F";
-        coverReadout.textContent = currentCoverage() + "% tree cover";
+        tempReadout.textContent = (temp > 0 ? "+" : "") + temp.toFixed(1) + "°F";
+        coverReadout.textContent = Math.round(currentCoverage()) + "% tree cover";
 
         countLabel.textContent = `${treesAdded} of ${MAX_TREES} trees planted`;
         addButton.disabled = treesAdded >= MAX_TREES; // greys out add tree button
@@ -126,15 +562,18 @@ resetButton.addEventListener("click", function () {
   update();
 });
 
-// draw the scatterplot as an svg
-const X_MAX = 60;   // coverage axis runs from 0% to 60%
-
 function drawChart() {
-  const W = 400, H = 300, pad = 45;
+  const W = 400, H = 300;
+  const m = { left: 58, right: 16, top: 16, bottom: 46 };   // room around the plot for labels
+
+  // Axis ranges, worked out from the data (rounded out to the next 10% and 5°)
+  const xMax = Math.ceil(Math.max(...scatterData.map(d => d.coverage), currentCoverage()) / 10) * 10;
+  const yMin = Math.floor(Math.min(...scatterData.map(d => d.temp), currentTemp(), 0) / 5) * 5;
+  const yMax = Math.ceil(Math.max(...scatterData.map(d => d.temp), currentTemp(), 0) / 5) * 5;
 
   // Turn a data value into a position in the drawing
-  const x = v => pad + v / X_MAX * (W - 2 * pad);
-  const y = v => H - pad - (v - THERMO_MIN) / (THERMO_MAX - THERMO_MIN) * (H - 2 * pad);
+  const x = v => m.left + v / xMax * (W - m.left - m.right);
+  const y = v => H - m.bottom - (v - yMin) / (yMax - yMin) * (H - m.top - m.bottom);
 
   // Best-fit line (least squares)
   const n = scatterData.length;
@@ -150,27 +589,32 @@ function drawChart() {
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" font-size="11" fill="#55646A">`;
 
-  // Axes and their titles
-  svg += `<line x1="${pad}" y1="${H - pad}" x2="${W - pad}" y2="${H - pad}" stroke="#1F2A2E"/>`;
-  svg += `<line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H - pad}" stroke="#1F2A2E"/>`;
-  svg += `<text x="${W / 2}" y="${H - 8}" text-anchor="middle" font-size="13" fill="#1F2A2E">Tree coverage</text>`;
-  svg += `<text x="${pad}" y="${pad - 14}" text-anchor="middle" font-size="13" fill="#1F2A2E">Temp (°F)</text>`;
+  // Y axis at 0% coverage, X axis at 0° (the area average)
+  svg += `<line x1="${x(0)}" y1="${y(yMax)}" x2="${x(0)}" y2="${y(yMin)}" stroke="#1F2A2E"/>`;
+  svg += `<line x1="${x(0)}" y1="${y(0)}" x2="${x(xMax)}" y2="${y(0)}" stroke="#1F2A2E"/>`;
 
-  // Tick labels
-  for (let t = 0; t <= X_MAX; t += 10) {
-    svg += `<text x="${x(t)}" y="${H - pad + 18}" text-anchor="middle">${t}%</text>`;
+  // Y tick labels, every 5°
+  for (let t = yMin; t <= yMax; t += 5) {
+    svg += `<text x="${x(0) - 8}" y="${y(t) + 4}" text-anchor="end">${t > 0 ? "+" : ""}${t}°</text>`;
   }
-  for (let t = THERMO_MIN; t <= THERMO_MAX; t += 5) {
-    svg += `<text x="${pad - 8}" y="${y(t) + 4}" text-anchor="end">${t}°</text>`;
+  // X tick marks on the axis line, labels along the bottom so dots never cover them
+  for (let t = 10; t <= xMax; t += 10) {
+    svg += `<line x1="${x(t)}" y1="${y(0) - 3}" x2="${x(t)}" y2="${y(0) + 3}" stroke="#1F2A2E"/>`;
+    svg += `<text x="${x(t)}" y="${H - m.bottom + 16}" text-anchor="middle">${t}%</text>`;
   }
 
-  // Trend line, from 0% to X_MAX
-  svg += `<line x1="${x(0)}" y1="${y(intercept)}" x2="${x(X_MAX)}" y2="${y(intercept + slope * X_MAX)}" stroke="#D7263D" stroke-width="2.5"/>`;
+  // Axis titles: x along the bottom, y turned to run up the axis
+  svg += `<text x="${(x(0) + x(xMax)) / 2}" y="${H - 8}" text-anchor="middle" font-size="13" fill="#1F2A2E">Tree coverage</text>`;
+  svg += `<text transform="translate(14, ${(y(yMax) + y(yMin)) / 2}) rotate(-90)" text-anchor="middle" font-size="13" fill="#1F2A2E">Surface heat vs. area average (°F)</text>`;
 
-  // One dot per neighborhood
+  // One dot per block group
   for (const d of scatterData) {
-    svg += `<circle cx="${x(d.coverage)}" cy="${y(d.temp)}" r="4.5" fill="#1F2A2E" fill-opacity="0.55"/>`;
+    svg += `<circle cx="${x(d.coverage)}" cy="${y(d.temp)}" r="2.5" fill="#1F2A2E" fill-opacity="0.35"/>`;
   }
+
+  // Trend line, across the range of real canopy values
+  const xEnd = Math.max(...scatterData.map(d => d.coverage));
+  svg += `<line x1="${x(0)}" y1="${y(intercept)}" x2="${x(xEnd)}" y2="${y(intercept + slope * xEnd)}" stroke="#D7263D" stroke-width="2.5"/>`;
 
   // Your block
   svg += `<circle cx="${x(currentCoverage())}" cy="${y(currentTemp())}" r="8" fill="#2F6B47" stroke="white" stroke-width="2.5"/>`;

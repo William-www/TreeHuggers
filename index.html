@@ -295,7 +295,7 @@
             <div id="chart-panel">
               <div class="chart-inner">
                 <h3>Tree coverage vs. temperature</h3>
-                <p>The green dot represents the amount of trees added</p>
+                <p>The green dot represents the amount of trees you have added.</p>
                 <div id="chart"></div>
               </div>
             </div>
@@ -303,6 +303,8 @@
               <div class="sky sky-hot"></div>
               <div class="sky sky-cool" id="sky-cool"></div>
               <div id="sun"></div>
+              <img class="cloud cloud-1" src="assets/heat/Cloud_02_Low.png" alt="">
+              <img class="cloud cloud-2" src="assets/heat/10_Cloud.png" alt="">
               <svg class="skyline" viewBox="0 0 560 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
                 <g fill="#1F2A2E" opacity="0.10">
                   <rect x="10" y="40" width="50" height="110"/>
@@ -325,7 +327,7 @@
               <div id="tree-layer"></div>
               <div class="ground"></div>
               <div class="readout">
-                <div id="temp-readout">95.0°F</div>
+                <div id="temp-readout">+14.3°F</div>
                 <div id="cover-readout">10% tree cover</div>
               </div>
               <div class="thermo">
@@ -337,8 +339,8 @@
               </div>
             </div>
             <div class="controls">
-              <p class="prompt">Add <span id="step-label">5</span>% more tree coverage</p>
-              <button id="add-tree" type="button" aria-label="Add a tree"></button>
+              <p class="prompt">Add coverage</p>
+              <button id="add-tree" type="button" aria-label="Add tree coverage"></button>
               <p id="count">0 of 8 trees planted</p>
               <button id="reset" type="button">Start over</button>
             </div>

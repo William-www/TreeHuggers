@@ -113,13 +113,20 @@
     width: 74px;
     height: 74px;
     border-radius: 50%; 
-    background: radial-gradient(circle at 40% 40%, #FFF4C8, #FFC94D 72%); 
+    background: url("../assets/heat/11_Sun.png") center / contain no-repeat; 
         
         
     transition: box-shadow 1.2s ease; 
         
         
 }
+#vis-heat .cloud {
+    position: absolute;
+    height: auto;
+    pointer-events: none;
+}
+#vis-heat .cloud-1 { top: 40px; left: 230px; width: 140px; }
+#vis-heat .cloud-2 { top: 100px; left: 360px; width: 100px; }
 #vis-heat .skyline {
     position: absolute; 
     left: 0; 
