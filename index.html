@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/vis-heat.css" />
     <link rel="stylesheet" href="css/vis-tree.css" />
@@ -139,25 +140,51 @@
       </section>
 
       <section class="workspace-section tone-paper" id="vis-2" aria-labelledby="vis-2-title">
-        <div class="wrap">
-          <div class="tree-head">
-            <div class="tree-copy">
-              <h2 id="vis-2-title">Atlanta Tree Canopy Coverage Across Administrative Levels</h2>
-              <p class="tree-meta"><span>Area-weighted tree canopy percentage (0–100%).</span> <span>Scroll to zoom, drag to pan, or click any Census Tract node to expand its Block Groups.</span> <span id="vis-2-link"></span></p>
+        <div class="explorer-shell">
+          <div class="header">
+            <div>
+              <div class="kicker">Linked spatial hierarchy · hover or click any node to highlight and refit scope</div>
+              <h2 id="vis-2-title">Atlanta Tree Canopy Explorer: Hierarchy Tree &amp; District Outlines</h2>
+              <div class="subtitle">Clicking any node in the tree or map zooms to fit that level’s full boundary.</div>
             </div>
-            <div class="tree-tools">
-              <button type="button" data-tree-layout="radial" class="is-active" aria-pressed="true">Radial</button>
-              <button type="button" data-tree-layout="orthogonal" aria-pressed="false">Horizontal</button>
+            <div class="controls">
+              <button type="button" id="btn-radial" class="active" aria-pressed="true">Radial tree</button>
+              <button type="button" id="btn-ortho" aria-pressed="false">Horizontal tree</button>
+              <button type="button" id="btn-reset-map">Reset full city map</button>
             </div>
           </div>
-          <div class="tree-legend" aria-label="Tree canopy percentage scale">
-            <span>Tree canopy %</span>
-            <span>0%</span>
-            <div class="tree-gradient"></div>
+          <div class="legend-bar">
+            <span>Tree canopy %: 0%</span>
+            <div class="gradient"></div>
             <span>75%+</span>
-            <span class="tree-levels">Spatial hierarchy · Root → NPU → Census tract → Block group</span>
+            <span class="legend-note"><span class="gold-swatch"></span>Map outline = selected node · dark inner lines = child sub-districts</span>
           </div>
-          <div id="vis-2-chart" role="img" aria-label="Tree of Atlanta tree canopy from the city to neighborhood planning units, census tracts, and block groups. Click a place to highlight that canopy range on the atlas."></div>
+          <div class="workspace">
+            <div class="tree-panel">
+              <div class="panel-header">
+                <span>01 / Hierarchy tree (NPU letter, tract #, or block group #)</span>
+                <span>Scroll to zoom · click tract to expand</span>
+              </div>
+              <div id="tree-chart" role="img" aria-label="Tree of Atlanta tree canopy from the city to neighborhood planning units, census tracts, and block groups."></div>
+              <div class="tree-size-legend">
+                <div class="tree-size-legend-title">Hierarchy level (by node size)</div>
+                <div class="size-row"><div class="circle-icon-wrap"><span class="circle-icon" style="width:22px;height:22px;"></span></div><span>1. City root (Atlanta)</span></div>
+                <div class="size-row"><div class="circle-icon-wrap"><span class="circle-icon" style="width:16px;height:16px;"></span></div><span>2. Neighborhood planning unit</span></div>
+                <div class="size-row"><div class="circle-icon-wrap"><span class="circle-icon" style="width:11px;height:11px;"></span></div><span>3. Census tract</span></div>
+                <div class="size-row"><div class="circle-icon-wrap"><span class="circle-icon" style="width:7px;height:7px;"></span></div><span>4. Block group</span></div>
+              </div>
+            </div>
+            <div class="right-column">
+              <div class="map-panel">
+                <div class="panel-header">
+                  <span>02 / District map</span>
+                  <span id="map-level-indicator">SCOPE: ALL NPUS</span>
+                </div>
+                <div id="map" role="img" aria-label="Map of Atlanta neighborhood planning units, census tracts, and block groups."></div>
+              </div>
+              <div class="info-badge" id="hover-info">Hover or click any node in the tree to inspect and zoom.</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -396,6 +423,7 @@
     <script src="js/state.js"></script>
     <script src="js/views/vis1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/views/vis2.js"></script>
     <script src="js/views/vis7.js"></script>
     <script src="prototypes/Tree_Huggers_Four_Pages/canopy/assets/d3.min.js"></script>
