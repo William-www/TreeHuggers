@@ -32,7 +32,9 @@ function mountVis2(treeData, geojsonData, childrenMap) {
     highlightGroup.clearLayers();
     map.flyToBounds(baseNpuLayer.getBounds(), { padding: [18, 18], duration: 0.6 });
     document.getElementById("map-level-indicator").innerText = "SCOPE: ALL NPUS";
-    document.getElementById("hover-info").innerHTML = "Hover or click any node in the tree to inspect & zoom...";
+    const hoverInfo = document.getElementById("hover-info");
+    hoverInfo.hidden = false;
+    hoverInfo.textContent = "Hover or click any node in the tree to inspect and zoom.";
   }
 
   function highlightOnMap(geoid, adjustScope) {
@@ -74,7 +76,9 @@ function mountVis2(treeData, geojsonData, childrenMap) {
     }
 
     document.getElementById("map-level-indicator").innerText = `SCOPE: ${p.name.toUpperCase()}`;
-    document.getElementById("hover-info").innerHTML =
+    const hoverInfo = document.getElementById("hover-info");
+    hoverInfo.hidden = false;
+    hoverInfo.innerHTML =
       `<b>${p.name}</b> [${levelNames[p.depth]}]<br/>` +
       `Tree Canopy: <b>${p.canopy}%</b> &nbsp;|&nbsp; Sub-districts outlined: ${childIds.length}`;
   }

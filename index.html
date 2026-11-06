@@ -136,9 +136,8 @@
         <div class="explorer-shell">
           <div class="header">
             <div>
-              <div class="kicker">Linked spatial hierarchy · hover or click any node to highlight and refit scope</div>
+              <div class="kicker">Linked spatial hierarchy</div>
               <h2 id="vis-2-title">Atlanta Tree Canopy Explorer: Hierarchy Tree &amp; District Outlines</h2>
-              <div class="subtitle">Clicking any node in the tree or map zooms to fit that level’s full boundary.</div>
             </div>
             <div class="controls">
               <button type="button" id="btn-radial" class="active" aria-pressed="true">Radial tree</button>
@@ -179,42 +178,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="workspace-section tone-paper" id="vis-distance" aria-labelledby="vis-distance-title">
-        <div class="wrap eq-wrap">
-          <div class="eq-head">
-            <div>
-              <p class="eyebrow">VISUALIZATION / DISTANCE</p>
-              <h2 id="vis-distance-title">Same distance from downtown. <em>Different shade.</em></h2>
-            </div>
-            <p class="eq-lead">Hold distance from Five Points steady, then compare HOLC grades. The ring keeps neighborhoods that sit a similar trip from downtown.</p>
-          </div>
-          <div class="eq-controls">
-            <div class="eq-slider">
-              <label for="eq-min">Inner ring <output id="eq-min-label" for="eq-min">3.0 km</output></label>
-              <input id="eq-min" type="range" min="500" max="14000" step="500" value="3000">
-            </div>
-            <div class="eq-slider">
-              <label for="eq-max">Outer ring <output id="eq-max-label" for="eq-max">6.0 km</output></label>
-              <input id="eq-max" type="range" min="1500" max="16000" step="500" value="6000">
-            </div>
-            <p class="eq-count">Rated block groups <strong id="eq-count">0</strong></p>
-          </div>
-          <div class="eq-stage">
-            <div class="eq-panel">
-              <h3>Where the ring falls</h3>
-              <div class="eq-plot" id="eq-map"></div>
-              <p class="eq-note">Color is the 1930s HOLC grade. Pale cells sit outside the ring or were never graded.</p>
-            </div>
-            <div class="eq-panel">
-              <h3>Heat, grade by grade</h3>
-              <div class="eq-plot" id="eq-bee"></div>
-              <p class="eq-note">Each dot is a block group inside the ring. Zero is the citywide surface-temperature average.</p>
-            </div>
-          </div>
-        </div>
-        <div class="eq-tip" id="eq-tip" role="tooltip"></div>
       </section>
 
       <section class="workspace-section tone-paper" id="vis-1" aria-labelledby="vis-1-title">
@@ -312,6 +275,43 @@
           </aside>
           </div>
         </div>
+      </section>
+
+      <section class="workspace-section tone-paper" id="vis-distance" aria-labelledby="vis-distance-title">
+        <div class="wrap eq-wrap">
+          <div class="eq-head">
+            <div>
+              <p class="eyebrow">VISUALIZATION / DISTANCE</p>
+              <h2 id="vis-distance-title">Same distance from downtown. <em>Different shade.</em></h2>
+            </div>
+            <p class="eq-lead">Hold distance from Five Points steady, then compare HOLC grades. The ring keeps neighborhoods that sit a similar trip from downtown.</p>
+          </div>
+          <div class="eq-controls">
+            <div class="eq-slider">
+              <label for="eq-min">Inner ring <output id="eq-min-label" for="eq-min">3.0 km</output></label>
+              <input id="eq-min" type="range" min="500" max="14000" step="500" value="3000">
+            </div>
+            <div class="eq-slider">
+              <label for="eq-max">Outer ring <output id="eq-max-label" for="eq-max">6.0 km</output></label>
+              <input id="eq-max" type="range" min="1500" max="16000" step="500" value="6000">
+            </div>
+            <p class="eq-count">Rated block groups <strong id="eq-count">0</strong></p>
+          </div>
+          <div class="eq-stage">
+            <div class="eq-panel">
+              <h3>Where the ring falls</h3>
+              <div class="eq-plot" id="eq-map"></div>
+              <p class="eq-note">Color is the 1930s HOLC grade. Pale cells sit outside the ring or were never graded.</p>
+            </div>
+            <div class="eq-panel">
+              <h3>Heat, grade by grade</h3>
+              <div class="eq-plot" id="eq-bee"></div>
+              <p class="eq-note">Each dot is a block group inside the ring. Zero is the citywide surface-temperature average.</p>
+              <p class="eq-read">Drag the inner and outer sliders to isolate an equidistant ring around Five Points (e.g., 3 to 6 km), filtering the map and the chart to tracts that share the same distance from downtown. On the right, compare how the dots align across grades: historically redlined Grade D neighborhoods cluster toward extreme heat spikes (+5°F to +15°F), while Grade A and B tracts remain protected in cooler territory.</p>
+            </div>
+          </div>
+        </div>
+        <div class="eq-tip" id="eq-tip" role="tooltip"></div>
       </section>
 
       <section class="workspace-section tone-paper" id="vis-heat" aria-labelledby="vis-heat-title">

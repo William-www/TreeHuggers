@@ -15,8 +15,6 @@
   flex-direction: column;
 }
 #vis-2 .header {
-  border-top: 2px solid var(--forest);
-  border-bottom: 1px solid rgba(24, 62, 44, .18);
   padding: 10px 0;
   display: flex;
   justify-content: space-between;
@@ -24,6 +22,10 @@
   gap: 16px;
   margin-bottom: 10px;
   flex: none;
+}
+#vis-2 .header > div:first-child {
+  flex: 1;
+  min-width: 0;
 }
 #vis-2 .kicker {
   font-size: 11px;
@@ -36,12 +38,12 @@
 #vis-2 h2 {
   max-width: none;
   margin: 0;
-  font-size: 21px;
+  white-space: nowrap;
+  font-size: clamp(24px, 1.9vw, 28px);
   font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  letter-spacing: -.045em;
+  line-height: 1.05;
 }
-#vis-2 .subtitle { font-size: 14px; color: var(--canopy); margin-top: 4px; font-weight: 700; }
 #vis-2 .controls { display: flex; gap: 6px; flex: none; }
 #vis-2 .controls button {
   background: transparent;
