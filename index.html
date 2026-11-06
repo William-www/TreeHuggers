@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="css/vis-heat.css" />
     <link rel="stylesheet" href="css/vis-tree.css" />
     <link rel="stylesheet" href="css/vis-equidistant.css" />
+    <link rel="stylesheet" href="css/vis-climate.css" />
     <link rel="stylesheet" href="prototypes/Tree_Huggers_Four_Pages/canopy/canopy-map.css" />
   </head>
   <body>
@@ -135,14 +136,14 @@
       <section class="workspace-section tone-paper" id="vis-2" aria-labelledby="vis-2-title">
         <div class="explorer-shell">
           <div class="header">
-            <div>
-              <p class="vis-kicker">VISUALIZATION / HIERARCHY</p>
-              <h2 id="vis-2-title">Atlanta Tree Canopy Explorer: Hierarchy Tree &amp; District Outlines</h2>
-            </div>
-            <div class="controls">
-              <button type="button" id="btn-radial" class="active" aria-pressed="true">Radial tree</button>
-              <button type="button" id="btn-ortho" aria-pressed="false">Horizontal tree</button>
-              <button type="button" id="btn-reset-map">Reset full city map</button>
+            <p class="vis-kicker">VISUALIZATION / HIERARCHY</p>
+            <div class="header-row">
+              <h2 id="vis-2-title">Tree Canopy Explorer: Hierarchy Tree &amp; District Outlines</h2>
+              <div class="controls">
+                <button type="button" id="btn-radial" class="active" aria-pressed="true">Radial tree</button>
+                <button type="button" id="btn-ortho" aria-pressed="false">Horizontal tree</button>
+                <button type="button" id="btn-reset-map">Reset full city map</button>
+              </div>
             </div>
           </div>
           <div class="legend-bar">
@@ -314,6 +315,34 @@
         <div class="eq-tip" id="eq-tip" role="tooltip"></div>
       </section>
 
+      <section class="workspace-section tone-paper" id="vis-climate" aria-labelledby="vis-climate-title">
+        <div class="climate-wrap">
+          <div class="climate-layout">
+            <div class="climate-heading">
+              <p class="eyebrow vis-kicker">VISUALIZATION / CLIMATE</p>
+              <h2 id="vis-climate-title">The city’s average <em>is rising.</em></h2>
+            </div>
+            <div class="climate-panel">
+              <div class="climate-panel-top">
+                <h3>Annual mean temperature, 2010–2023</h3>
+                <p class="climate-key">
+                  <span><i class="key-mean"></i>Annual average</span>
+                  <span><i class="key-trend"></i>Trend, +1.44°F / decade</span>
+                </p>
+              </div>
+              <div class="climate-plot" id="climate-chart"></div>
+            </div>
+            <p class="climate-note">Each point is Atlanta’s annual average mean temperature. From 2010 to 2023 the direct change is +2.72°F (+1.51°C). The fitted trend rises +1.87°F (+1.04°C), about +0.80°C per decade.</p>
+            <aside class="climate-copy" aria-label="Why rising temperature matters">
+              <p class="eyebrow">WHY IT MATTERS</p>
+              <h3>Climate change, in brief</h3>
+              <p>Climate change has been noticed as a worldwide problem since the 1970s, and since then we have seen noticeable increases in temperature in the last decade alone. Rising temperatures have adverse effects on people, where they can cause droughts, dehydration, and heat stroke.</p>
+            </aside>
+          </div>
+        </div>
+        <div class="climate-tip" id="climate-tip" role="tooltip"></div>
+      </section>
+
       <section class="workspace-section tone-paper" id="vis-heat" aria-labelledby="vis-heat-title">
         <div class="page">
           <p class="vis-kicker">VISUALIZATION / HEAT</p>
@@ -434,5 +463,6 @@
     <script src="prototypes/Tree_Huggers_Four_Pages/canopy/basemap.js"></script>
     <script src="prototypes/Tree_Huggers_Four_Pages/canopy/canopy-map.js"></script>
     <script src="js/views/equidistant.js"></script>
+    <script src="js/views/climate.js"></script>
   </body>
 </html>

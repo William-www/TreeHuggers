@@ -1,0 +1,150 @@
+#vis-climate.workspace-section {
+  flex-direction: column;
+  padding: calc(var(--header) + 14px) 0 16px;
+  overflow: hidden;
+  background: var(--paper);
+}
+#vis-climate .climate-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  width: min(var(--vis-width), calc(100% - 48px));
+  margin: 0 auto;
+}
+#vis-climate .climate-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  column-gap: clamp(18px, 2.4vw, 36px);
+  row-gap: 12px;
+  align-items: stretch;
+  min-height: 0;
+  height: 100%;
+}
+#vis-climate .climate-heading { grid-column: 1; grid-row: 1; margin: 0; }
+#vis-climate h2 {
+  margin: 0;
+  max-width: none;
+  font-size: clamp(28px, 2.6vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -.045em;
+}
+#vis-climate h2 em { font-style: normal; color: var(--canopy); }
+#vis-climate .climate-panel {
+  grid-column: 1;
+  grid-row: 2;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 12px 12px;
+  border: 1px solid rgba(24, 62, 44, .17);
+  border-top: 5px solid var(--gold);
+  background: var(--white);
+  box-shadow: 13px 13px 0 rgba(131, 185, 182, .27);
+}
+#vis-climate .climate-panel-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+#vis-climate .climate-panel h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--canopy);
+}
+#vis-climate .climate-key {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  color: var(--canopy);
+  font-size: 12px;
+  font-weight: 800;
+}
+#vis-climate .climate-key span { display: inline-flex; align-items: center; gap: 7px; }
+#vis-climate .key-mean,
+#vis-climate .key-trend {
+  display: inline-block;
+  width: 22px;
+  height: 0;
+  border-top: 3px solid var(--terracotta);
+}
+#vis-climate .key-trend { border-top-style: dashed; border-top-color: var(--forest); }
+#vis-climate .climate-plot { flex: 1; min-height: 0; }
+#vis-climate .climate-plot svg { display: block; width: 100%; height: 100%; font-family: Nunito, Arial, sans-serif; }
+#vis-climate .climate-axis text { fill: var(--canopy); font-size: 11px; font-weight: 800; }
+#vis-climate .climate-axis path,
+#vis-climate .climate-axis line { stroke: rgba(24, 62, 44, .35); }
+#vis-climate .climate-note {
+  grid-column: 1;
+  grid-row: 3;
+  margin: 0;
+  color: var(--canopy);
+  font-size: 12px;
+  line-height: 1.4;
+}
+#vis-climate .climate-copy {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  min-width: 0;
+  max-height: 100%;
+  overflow: auto;
+  padding-right: 4px;
+}
+#vis-climate .climate-copy .eyebrow {
+  margin: 0 0 8px;
+  color: var(--canopy);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+#vis-climate .climate-copy h3 {
+  margin: 0 0 10px;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  text-transform: none;
+  color: var(--forest);
+}
+#vis-climate .climate-copy p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+#vis-climate .climate-tip {
+  position: fixed;
+  display: none;
+  z-index: 30;
+  max-width: 240px;
+  padding: 10px 12px;
+  background: var(--forest);
+  color: var(--paper);
+  font-size: 12px;
+  line-height: 1.45;
+  pointer-events: none;
+  box-shadow: 8px 8px 0 rgba(131, 185, 182, .35);
+}
+#vis-climate .climate-tip strong { font-weight: 800; }
+
+@media (max-width: 900px) {
+  #vis-climate.workspace-section { overflow: auto; }
+  #vis-climate .climate-wrap { height: auto; }
+  #vis-climate .climate-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    height: auto;
+  }
+  #vis-climate .climate-panel { min-height: 420px; grid-row: 2; }
+  #vis-climate .climate-note { grid-row: 3; }
+  #vis-climate .climate-copy { grid-column: 1; grid-row: 4; max-height: none; overflow: visible; }
+  #vis-climate .climate-panel-top { display: block; }
+  #vis-climate .climate-key { margin-top: 8px; }
+}
