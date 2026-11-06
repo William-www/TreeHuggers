@@ -54,10 +54,6 @@
               <p class="eyebrow vis-kicker">VISUALIZATION / CANOPY</p>
               <h2 id="vis-canopy-title">A city of <em>uneven shade.</em></h2>
             </div>
-            <div class="intro-copy">
-              <p>Atlanta’s green canopy is a patchwork.<br>Explore the pieces. Compare what you find.</p>
-              <span>433 grid cells · 1 km grid, clipped to city limits</span>
-            </div>
           </div>
           <div class="explorer">
             <div class="atlas">
@@ -69,8 +65,11 @@
                 </div>
               </div>
               <div class="map-stage">
-                <svg id="canopy-map" role="group" aria-label="Interactive canopy coverage map of Atlanta. Use arrow keys to move between grid cells and Enter to select."></svg>
-                <p class="basemap-credit" id="basemap-credit">Basemap: <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer" target="_blank" rel="noopener noreferrer">USGS · The National Map</a></p>
+                <div class="map-frame">
+                  <svg id="canopy-map" role="group" aria-label="Interactive canopy coverage map of Atlanta. Use arrow keys to move between grid cells and Enter to select."></svg>
+                  <p class="interaction-nudge map-nudge" id="map-nudge">Pick two squares to compare</p>
+                  <p class="basemap-credit" id="basemap-credit">Basemap: <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer" target="_blank" rel="noopener noreferrer">USGS · The National Map</a></p>
+                </div>
               </div>
               <div class="map-bottom">
                 <div class="layer-opacity-control">
@@ -80,6 +79,7 @@
                 <div class="legend-title">
                   <span>Tree canopy coverage · ▧ 0% values need checking</span>
                   <button id="clear-filter" type="button" hidden>Show all</button>
+                  <p class="interaction-nudge legend-nudge" id="legend-nudge">Click a color to highlight</p>
                 </div>
                 <div id="map-legend" class="map-legend" aria-label="Filter by canopy coverage"></div>
                 <p class="legend-note">Select a range to highlight it here and in the neighborhood hierarchy below. Opacity does not change values. <span class="zero-symbol">▧</span> Zero values need verification.</p>
@@ -93,17 +93,13 @@
                 <p class="value-label">tree canopy coverage</p>
                 <div class="note-bottom">
                   <span id="detail-location">Each piece has its own story.</span>
-                  <p id="detail-status">Move across the map to explore the reported coverage in each grid cell.</p>
                 </div>
               </div>
-              <label class="grid-picker-label" for="grid-picker">Or find a grid by ID</label>
-              <select id="grid-picker"><option value="">Choose a grid cell…</option></select>
               <div class="comparison">
                 <div class="comparison-header">
                   <h3>Compare two grid cells</h3>
                   <button id="reset-selection" type="button">Clear picks</button>
                 </div>
-                <p class="compare-instruction" id="selection-instruction">Select a cell for A, then another for B.</p>
                 <div class="compare-slots">
                   <button type="button" class="compare-slot" id="slot-a" aria-pressed="true"><span class="slot-label"><span class="slot-letter">A</span><span id="a-id">Pick a piece</span></span><strong id="a-value">—</strong><span class="slot-action" id="a-action">Next selection</span></button>
                   <button type="button" class="compare-slot" id="slot-b" aria-pressed="false"><span class="slot-label"><span class="slot-letter">B</span><span id="b-id">Pick a piece</span></span><strong id="b-value">—</strong><span class="slot-action" id="b-action">Select second</span></button>
