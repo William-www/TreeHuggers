@@ -29,7 +29,7 @@
           <p class="hero-brand">Tree Huggers</p>
           <h1 id="hero-title">City in the<br /><em class="hero-forest">FOREST.</em><br />Shade for whom?</h1>
           <p class="hero-intro">An exploration of how tree canopy variance in Atlanta affects heat perception.</p>
-          <a class="hero-cta" href="#story">Explore the project <span aria-hidden="true">→</span></a>
+          <p class="scroll-cue">Scroll to explore <span class="scroll-cue-arrow" aria-hidden="true">↓</span></p>
         </div>
       </section>
 
@@ -152,8 +152,8 @@
             <div class="tree-panel">
               <div class="panel-header">
                 <span>01 / Hierarchy tree (NPU letter, tract #, or block group #)</span>
-                <span>Scroll to zoom · click tract to expand</span>
               </div>
+              <p class="tree-nudge">Scroll to zoom · click tract to expand.<br>Click a tract to see where it is on the right.</p>
               <div id="tree-chart" role="img" aria-label="Tree of Atlanta tree canopy from the city to neighborhood planning units, census tracts, and block groups."></div>
               <div class="tree-size-legend">
                 <div class="tree-size-legend-title">Hierarchy level (by node size)</div>
@@ -262,7 +262,7 @@
           <aside class="concept-caption" aria-label="What redlining and the HOLC grades mean">
             <p class="eyebrow">WHY THESE GRADES</p>
             <h3>Redlining, in brief</h3>
-            <p>In the 1930s the Home Owners’ Loan Corporation graded neighborhoods by how risky a mortgage seemed. The poorest areas, where more Black residents lived, were outlined in red and cut off from loans. That practice is called redlining.</p>
+            <p>In the 1930s the <strong class="jargon">Home Owners’ Loan Corporation (HOLC)</strong> graded neighborhoods by how risky a mortgage seemed. The poorest areas, where more Black residents lived, were outlined in red and cut off from loans. That practice is called redlining.</p>
             <ul class="grade-key">
               <li><span class="grade-mark" style="--grade:var(--canopy)">A</span><span><strong>Best.</strong> Newest housing, highest demand, and often restricted to white residents. Lenders treated these streets as the safest bet.</span></li>
               <li><span class="grade-mark" style="--grade:var(--mist)">B</span><span><strong>Still desirable.</strong> Stable areas HOLC still considered a sound investment.</span></li>
@@ -392,7 +392,7 @@
               </div>
             </div>
             <div class="controls">
-              <p class="prompt">Add coverage</p>
+              <p class="prompt">Add coverage<br><span class="click-me">CLICK ME!</span></p>
               <button id="add-tree" type="button" aria-label="Add tree coverage"></button>
               <p id="count">0 of 8 trees planted</p>
               <button id="reset" type="button">Start over</button>
