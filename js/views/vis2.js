@@ -20,8 +20,9 @@ function mountVis2(treeData, geojsonData, childrenMap) {
       dashArray: "2,2"
     }),
     onEachFeature: (feature, layer) => {
-      layer.on("mouseover", () => highlightOnMap(feature.properties.geoid, false));
-      layer.on("click", () => highlightOnMap(feature.properties.geoid, true));
+      const geoid = feature.properties.geoid;
+      layer.on("mouseover", () => showMatch(geoid, false));
+      layer.on("click", () => showMatch(geoid, true));
     }
   }).addTo(map);
 
@@ -29,23 +30,44 @@ function mountVis2(treeData, geojsonData, childrenMap) {
   const highlightGroup = L.layerGroup().addTo(map);
 
   function resetMap() {
+    shownGeoid = null;
     highlightGroup.clearLayers();
+    clearTreeSelection();
     map.flyToBounds(baseNpuLayer.getBounds(), { padding: [18, 18], duration: 0.6 });
     document.getElementById("map-level-indicator").innerText = "SCOPE: ALL NPUS";
     const hoverInfo = document.getElementById("hover-info");
     hoverInfo.hidden = false;
-    hoverInfo.textContent = "Hover or click any node in the tree to inspect and zoom.";
+    hoverInfo.textContent = "Hover or click either side. The tree and the map stay matched.";
   }
 
   function highlightOnMap(geoid, adjustScope) {
     const feat = featureById[geoid];
     if (!feat) return;
 
+    if (shownGeoid === geoid && highlightGroup.getLayers().length > 0 && !adjustScope) return;
+    shownGeoid = geoid;
+
     highlightGroup.clearLayers();
     const levelNames = ["CITY ROOT", "NEIGHBORHOOD PLANNING UNIT", "CENSUS TRACT", "BLOCK GROUP"];
     const p = feat.properties;
     const boundsGroup = L.featureGroup();
     const childIds = childrenMap[geoid] || [];
+
+    const selectedLayer = L.geoJSON(feat, {
+      style: {
+        fillColor: p.color,
+        fillOpacity: childIds.length > 0 ? 0.12 : 0.80,
+        color: "#F2B544",
+        weight: 4
+      }
+    }).addTo(highlightGroup);
+    selectedLayer.eachLayer((layer) => {
+      layer.on("click", (event) => {
+        L.DomEvent.stop(event);
+        showMatch(geoid, true);
+      });
+    });
+    boundsGroup.addLayer(selectedLayer);
 
     childIds.forEach((cid) => {
       const cFeat = featureById[cid];
@@ -58,18 +80,14 @@ function mountVis2(treeData, geojsonData, childrenMap) {
           weight: 1.3
         }
       }).addTo(highlightGroup);
+      cLayer.eachLayer((layer) => {
+        layer.on("click", (event) => {
+          L.DomEvent.stop(event);
+          showMatch(cid, true);
+        });
+      });
       boundsGroup.addLayer(cLayer);
     });
-
-    const selectedLayer = L.geoJSON(feat, {
-      style: {
-        fillColor: p.color,
-        fillOpacity: childIds.length > 0 ? 0.12 : 0.80,
-        color: "#F2B544",
-        weight: 4
-      }
-    }).addTo(highlightGroup);
-    boundsGroup.addLayer(selectedLayer);
 
     if (adjustScope && boundsGroup.getLayers().length > 0) {
       map.flyToBounds(boundsGroup.getBounds(), { padding: [22, 22], duration: 0.65 });
@@ -99,6 +117,7 @@ function mountVis2(treeData, geojsonData, childrenMap) {
         }
       },
       series: [{
+        id: "hierarchy",
         type: "tree",
         data: [treeData],
         layout: layoutType,
@@ -119,10 +138,105 @@ function mountVis2(treeData, geojsonData, childrenMap) {
     };
   }
 
+  let layoutType = "radial";
+
   function setLayout(type) {
+    layoutType = type;
     document.getElementById("btn-radial").classList.toggle("active", type === "radial");
     document.getElementById("btn-ortho").classList.toggle("active", type === "orthogonal");
     chart.setOption(getOption(type), true);
+    if (selectedGeoid) paintTreeNode(selectedGeoid);
+  }
+
+  const nodeByGeoid = {};
+  const parentByGeoid = {};
+  (function indexTree(node, parent) {
+    node.id = node.geoid;
+    nodeByGeoid[node.geoid] = node;
+    parentByGeoid[node.geoid] = parent;
+    (node.children || []).forEach((child) => indexTree(child, node));
+  })(treeData, null);
+
+  let shownGeoid = null;
+  let selectedGeoid = null;
+  const savedNodeStyle = {};
+
+  function rememberNode(node) {
+    if (savedNodeStyle[node.geoid]) return;
+    savedNodeStyle[node.geoid] = {
+      itemStyle: Object.assign({}, node.itemStyle),
+      symbolSize: node.symbolSize,
+      symbol: node.symbol || null,
+      label: node.label || null
+    };
+  }
+
+  function restoreNode(geoid) {
+    const node = nodeByGeoid[geoid];
+    const saved = node && savedNodeStyle[geoid];
+    if (!node || !saved) return;
+    node.itemStyle = Object.assign({}, saved.itemStyle);
+    node.symbolSize = saved.symbolSize;
+    if (saved.symbol) node.symbol = saved.symbol;
+    else delete node.symbol;
+    if (saved.label) node.label = saved.label;
+    else delete node.label;
+  }
+
+  function paintTreeNode(geoid) {
+    const node = nodeByGeoid[geoid];
+    if (!node) return;
+    if (selectedGeoid && selectedGeoid !== geoid) restoreNode(selectedGeoid);
+    rememberNode(node);
+    const saved = savedNodeStyle[geoid];
+    let parent = parentByGeoid[geoid];
+    while (parent) {
+      parent.collapsed = false;
+      parent = parentByGeoid[parent.geoid];
+    }
+    node.symbol = "circle";
+    node.itemStyle = Object.assign({}, saved.itemStyle, {
+      color: "#F2B544",
+      borderColor: "#183e2c",
+      borderWidth: 2
+    });
+    node.symbolSize = (saved.symbolSize || 10) + 14;
+    node.label = {
+      color: "#183e2c",
+      fontWeight: 800,
+      fontSize: 14
+    };
+    selectedGeoid = geoid;
+    chart.dispatchAction({ type: "downplay", seriesIndex: 0 });
+    chart.setOption(getOption(layoutType));
+  }
+
+  function clearTreeSelection() {
+    if (selectedGeoid) restoreNode(selectedGeoid);
+    selectedGeoid = null;
+    chart.setOption(getOption(layoutType));
+  }
+
+  function treeDataIndex(geoid) {
+    const data = chart.getModel().getSeriesByIndex(0).getData();
+    for (let i = 0; i < data.count(); i++) {
+      const raw = data.getRawDataItem(i);
+      if (raw && raw.geoid === geoid) return i;
+    }
+    return -1;
+  }
+
+  function hoverTreeNode(geoid) {
+    const dataIndex = treeDataIndex(geoid);
+    if (dataIndex < 0) return;
+    chart.dispatchAction({ type: "downplay", seriesIndex: 0 });
+    chart.dispatchAction({ type: "highlight", seriesIndex: 0, dataIndex: dataIndex });
+  }
+
+  function showMatch(geoid, adjustScope) {
+    highlightOnMap(geoid, adjustScope);
+    if (adjustScope) paintTreeNode(geoid);
+    else hoverTreeNode(geoid);
   }
 
   chart.setOption(getOption("radial"));
@@ -130,7 +244,9 @@ function mountVis2(treeData, geojsonData, childrenMap) {
     if (params.data && params.data.geoid) highlightOnMap(params.data.geoid, false);
   });
   chart.on("click", (params) => {
-    if (params.data && params.data.geoid) highlightOnMap(params.data.geoid, true);
+    if (!params.data || !params.data.geoid) return;
+    highlightOnMap(params.data.geoid, true);
+    paintTreeNode(params.data.geoid);
   });
 
   document.getElementById("btn-radial").addEventListener("click", () => setLayout("radial"));
